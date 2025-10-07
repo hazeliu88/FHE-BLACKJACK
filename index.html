@@ -1,0 +1,1181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🃏 FHE Blackjack</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600;700&display=swap');
+        
+        * {
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Rajdhani', sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #0f1419 0%, #1a2332 50%, #0f1419 100%);
+            color: #e1e8f0;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: linear-gradient(145deg, rgba(26, 35, 50, 0.9), rgba(15, 20, 25, 0.95));
+            padding: 40px;
+            border-radius: 25px;
+            backdrop-filter: blur(20px);
+            box-shadow: 
+                0 20px 40px rgba(0, 0, 0, 0.4),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1),
+                0 0 60px rgba(120, 119, 198, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        h1 {
+            font-family: 'Orbitron', monospace;
+            margin: 0;
+            font-size: 2.6em;
+            font-weight: 900;
+            background: linear-gradient(135deg, #ffd700, #ff6b35, #7c4dff);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .subtitle {
+            margin: 4px 0 0 0;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 24px;
+            margin-bottom: 30px;
+        }
+
+        .title-block {
+            max-width: 60%;
+        }
+
+        .wallet-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            align-items: flex-end;
+        }
+
+        .wallet-summary {
+            display: flex;
+            gap: 8px;
+            font-size: 0.95em;
+            color: rgba(255, 255, 255, 0.85);
+        }
+
+        .wallet-label {
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #ffd700;
+        }
+
+        .wallet-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .wallet-buttons button {
+            min-width: 150px;
+        }
+
+        .info-banner {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+        }
+
+        .info-banner h3 {
+            margin: 0 0 10px 0;
+        }
+
+        .info-banner ul {
+            margin: 0;
+            padding-left: 18px;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .table-wrapper {
+            position: relative;
+            padding: 40px;
+            border-radius: 32px;
+            background: radial-gradient(circle at center, rgba(32, 90, 50, 0.9), rgba(8, 20, 16, 0.95));
+            border: 2px solid rgba(255, 215, 0, 0.25);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.45);
+            margin-top: 30px;
+            flex: 2 1 520px;
+            min-width: 0;
+        }
+
+        .table-surface {
+            position: relative;
+            border-radius: 24px;
+            padding: 70px 30px 30px;
+            background: radial-gradient(circle at center, rgba(20, 60, 35, 0.92), rgba(12, 30, 22, 0.95));
+            overflow: hidden;
+        }
+
+        .table-glow {
+            position: absolute;
+            inset: 18px;
+            border: 1px solid rgba(255, 215, 0, 0.15);
+            border-radius: 22px;
+            pointer-events: none;
+        }
+
+        .table-wrapper::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 150%;
+            height: 150%;
+            background: radial-gradient(circle, rgba(255, 215, 0, 0.08), transparent 70%);
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+        }
+
+        .game-area {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 24px;
+            align-items: flex-start;
+        }
+
+        .cards {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            flex-wrap: wrap;
+            min-height: 140px;
+        }
+
+        .card {
+            width: 70px;
+            height: 100px;
+            border-radius: 10px;
+            background: radial-gradient(circle at top, #fff, #f4f4f4);
+            border: 2px solid #272727;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            font-size: 1.4em;
+            font-weight: 700;
+            text-shadow: 0 1px 1px rgba(0,0,0,0.15);
+        }
+
+        .card.red {
+            color: #d64b4b;
+        }
+
+        .card.hidden {
+            background: linear-gradient(135deg, #1f2933, #101820);
+            border: 2px solid rgba(255, 255, 255, 0.18);
+        }
+
+        .card.hidden .card-back {
+            width: 90%;
+            height: 90%;
+            border-radius: 8px;
+            background: repeating-linear-gradient(
+                45deg,
+                rgba(255, 215, 0, 0.12),
+                rgba(255, 215, 0, 0.12) 6px,
+                rgba(124, 77, 255, 0.25) 6px,
+                rgba(124, 77, 255, 0.25) 12px
+            );
+            border: 1px solid rgba(255, 215, 0, 0.4);
+        }
+
+        .game-controls {
+            display: none;
+            justify-content: center;
+            gap: 16px;
+            margin-top: 24px;
+        }
+
+        .game-controls button {
+            flex: 0 0 160px;
+        }
+
+        .force-reset {
+            background: linear-gradient(135deg, #4e9a51, #2f6f35);
+            color: #fff;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .action-buttons button {
+            flex: 1 1 140px;
+        }
+
+        .table-status {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 10px 24px;
+            border-radius: 999px;
+            background: rgba(0, 0, 0, 0.45);
+            color: #ffd700;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            transition: color 0.3s ease;
+            pointer-events: none;
+        }
+
+        .table-status[data-tone="error"] {
+            color: #ff6b6b;
+        }
+
+        .table-status[data-tone="success"] {
+            color: #7cff9c;
+        }
+
+        .table-status[data-tone="progress"] {
+            color: #ffd700;
+        }
+
+        .control-label {
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-size: 0.9em;
+            color: #ffd700;
+        }
+
+        .value-input {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .value-input input {
+            width: 100%;
+            padding: 12px;
+        }
+
+        .wei-display {
+            font-size: 0.85em;
+            color: #ffd700;
+            opacity: 0.8;
+        }
+
+        .warning {
+            font-size: 0.9em;
+            color: #ff6b6b;
+        }
+
+        .play-layout {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 28px;
+            align-items: stretch;
+        }
+
+        .action-panel {
+            display: flex;
+            flex: 1 1 320px;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin: 24px 0;
+        }
+
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 16px;
+            border-radius: 12px;
+            flex: 1 1 220px;
+            min-width: 0;
+        }
+
+        .control-label {
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+            color: #ffd700;
+        }
+
+        .value-input {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        
+        input, button {
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1em;
+            font-weight: 600;
+        }
+        
+        input {
+            background: rgba(255, 255, 255, 0.1);
+            color: #e1e8f0;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        button {
+            background: linear-gradient(135deg, #ffd700, #ff6b35);
+            color: #000;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        button:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(255, 215, 0, 0.3);
+        }
+        
+        button:disabled {
+            background: #555;
+            color: #aaa;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .game-controls {
+            display: none;
+            gap: 15px;
+        }
+        
+        .score {
+            font-size: 1.5em;
+            font-weight: 700;
+            color: #ffd700;
+            margin-top: 10px;
+        }
+        
+        .balance-info {
+            background: rgba(76, 175, 80, 0.1);
+            border: 2px solid rgba(76, 175, 80, 0.3);
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        .balance-info h3 {
+            margin: 0 0 10px 0;
+            color: #4CAF50;
+        }
+
+        @media (max-width: 900px) {
+            .play-layout {
+                flex-direction: column;
+            }
+
+            .action-panel {
+                flex: 1 1 100%;
+            }
+
+            .action-buttons button {
+                flex: 1 1 100%;
+            }
+        }
+        
+        .improvement-note {
+            background: rgba(124, 77, 255, 0.1);
+            border: 2px solid rgba(124, 77, 255, 0.3);
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .improvement-note h3 {
+            color: #7c4dff;
+            margin-top: 0;
+        }
+        
+        .improvement-note ul {
+            margin: 10px 0;
+            padding-left: 20px;
+        }
+        
+        .improvement-note li {
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="top-bar">
+            <div class="title-block">
+                <h1>🃏 FHE Blackjack</h1>
+                <p class="subtitle">Privacy-preserving blackjack powered by Zama FHE on Sepolia.</p>
+            </div>
+            <div class="wallet-panel">
+                <div class="wallet-summary">
+                    <span class="wallet-label">Wallet:</span>
+                    <span id="wallet-address">Not Connected</span>
+                </div>
+                <div class="wallet-summary">
+                    <span class="wallet-label">Balance:</span>
+                    <span id="balance">-</span>
+                </div>
+                <div class="wallet-buttons">
+                    <button id="connect-wallet">🔗 Connect Wallet</button>
+                    <button id="check-balance" disabled>💰 Check Balance</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="info-banner">
+            <h3>🎮 Game Features</h3>
+            <ul>
+                <li>Proper blackjack scoring with ace flexibility and face cards as 10</li>
+                <li>Dealer hits on 16, stands on 17, with natural blackjack detection</li>
+                <li>Better randomness seeded from multiple on-chain sources</li>
+                <li>Immediate balance updates: bets deducted upfront, winnings paid automatically</li>
+            </ul>
+        </div>
+
+        <div class="status" id="status">Connect your wallet to begin.</div>
+
+        <div class="play-layout">
+            <div class="action-panel">
+                <div class="control-group">
+                    <label class="control-label" for="deposit-amount">Deposit Amount (ETH)</label>
+                    <div class="value-input">
+                        <input type="number" id="deposit-amount" placeholder="Deposit Amount" value="0.0000000001" min="0" step="any">
+                        <div class="wei-display" id="deposit-wei-display">Wei: 0</div>
+                    </div>
+                    <button id="deposit" disabled>💳 Deposit</button>
+                </div>
+
+                <div class="control-group">
+                    <label class="control-label" for="bet-amount">Bet Amount (ETH)</label>
+                    <div class="value-input">
+                        <input type="number" id="bet-amount" placeholder="Bet Amount" value="0.0000000001" min="0" step="any">
+                        <div class="wei-display" id="bet-wei-display">Wei: 0</div>
+                    </div>
+                    <div class="warning" id="bet-warning" style="display: none;"></div>
+                    <div class="action-buttons">
+                        <button id="start-game" disabled>🎲 Start Game</button>
+                        <button id="force-reset" class="force-reset" disabled>♻️ Force Reset</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="table-wrapper">
+                <div class="table-surface">
+                    <div class="table-glow"></div>
+                    <div class="table-status" id="table-status" data-tone="info">Ready to play</div>
+                    <div class="game-area">
+                        <div class="player-area">
+                            <h3>🎯 Your Hand</h3>
+                            <div class="cards" id="player-cards"></div>
+                            <div class="score" id="player-score">Score: -</div>
+                        </div>
+                        <div class="dealer-area">
+                            <h3>🏠 Dealer Hand</h3>
+                            <div class="cards" id="dealer-cards"></div>
+                            <div class="score" id="dealer-score">Score: -</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="controls game-controls" id="game-controls">
+            <button id="hit">🃏 Hit</button>
+            <button id="stand">✋ Stand</button>
+        </div>
+    </div>
+
+    <script type="module">
+        import { BrowserProvider, Contract, formatUnits, parseEther } from "https://cdn.jsdelivr.net/npm/ethers@6.7.0/+esm";
+        const contractAddress = "0x71BAdaee4889fe2171A96A43367539953b0f7dD6";
+        const contractABI = [
+            "function deposit() external payable",
+            "function startGameTest(uint256 betAmount) external",
+            "function hit() external", 
+            "function stand() external",
+            "function forceReset() external",
+            "function getBalance() external view returns (uint256)",
+            "function getGameState() external view returns (bool isActive, uint8 state)",
+            "function getPlayerCards() external view returns (uint8[] memory cards, uint8 count, uint8 score)",
+            "function getDealerCards() external view returns (uint8[] memory cards, uint8 count, uint8 score)",
+            "function getGameDetails() external view returns (bool isActive, uint8 state, uint8 playerScore, uint8 dealerScore, uint8 playerCardCount, uint8 dealerCardCount)",
+            "event GameStarted(address indexed player, uint256 betAmount)",
+            "event GameEnded(address indexed player, uint8 result)",
+            "event Deposit(address indexed player, uint256 amount)",
+            "event CardDealt(address indexed player, bool isPlayer, uint8 card)"
+        ];
+
+        let provider, signer, contract, userAddress;
+        let lastKnownBalance = 0n;
+        let hasKnownBalance = false;
+        const animationTimers = [];
+        const suitCache = { player: [], dealer: [] };
+        let currentGameActive = false;
+        let currentGameState = 0;
+        let currentBetWei = 0n;
+        let balanceBeforeRound = 0n;
+        let lastPlayerCardCount = 0;
+        let lastPlayerScore = 0;
+        let lastRoundMessage = null;
+        let lastRoundTone = 'info';
+
+        function setTableStatus(message, tone = 'info') {
+            const element = document.getElementById('table-status');
+            if (!element) return;
+            element.textContent = message;
+            element.dataset.tone = tone;
+        }
+
+        function updateStatus(message, tone = 'info', preserveTable = false) {
+            document.getElementById('status').textContent = message;
+            if (!preserveTable) {
+                setTableStatus(message, tone);
+            }
+            console.log("Status:", message);
+        }
+
+        function shortAddress(address) {
+            return address ? `${address.slice(0, 6)}...${address.slice(-4)}` : 'Not Connected';
+        }
+
+        function cardValueToString(value) {
+            if (value === 1) return 'A';
+            if (value === 11) return 'J';
+            if (value === 12) return 'Q';  
+            if (value === 13) return 'K';
+            return value.toString();
+        }
+
+        function getDepositWeiValue() {
+            const input = document.getElementById('deposit-amount');
+            if (!input) return null;
+            const raw = input.value.trim();
+            if (!raw) return null;
+            try {
+                const wei = parseEther(raw);
+                if (wei <= 0n) {
+                    return null;
+                }
+                return wei;
+            } catch (error) {
+                return null;
+            }
+        }
+
+        function updateDepositWeiDisplay() {
+            const display = document.getElementById('deposit-wei-display');
+            if (!display) return;
+            const wei = getDepositWeiValue();
+            display.textContent = wei ? `Wei: ${wei.toString()}` : 'Wei: -';
+            updateDepositButtonState();
+        }
+
+        function getBetWeiValue() {
+            const input = document.getElementById('bet-amount');
+            if (!input) return null;
+            const raw = input.value.trim();
+            if (!raw) return null;
+            try {
+                const wei = parseEther(raw);
+                if (wei <= 0n) {
+                    return null;
+                }
+                return wei;
+            } catch (error) {
+                return null;
+            }
+        }
+
+        function updateBetWeiDisplay() {
+            const display = document.getElementById('bet-wei-display');
+            if (!display) return;
+            const wei = getBetWeiValue();
+            display.textContent = wei ? `Wei: ${wei.toString()}` : 'Wei: -';
+        }
+
+        function updateStartButtonState() {
+            const startButton = document.getElementById('start-game');
+            const warning = document.getElementById('bet-warning');
+            if (!startButton) return;
+            const betWei = getBetWeiValue();
+
+            if (!contract) {
+                startButton.disabled = true;
+                if (warning) { warning.style.display = 'none'; warning.textContent = ''; }
+                return;
+            }
+
+            if (currentGameActive) {
+                startButton.disabled = true;
+                if (warning) {
+                    warning.style.display = 'block';
+                    warning.textContent = 'Finish the current round or use Force Reset first.';
+                }
+                return;
+            }
+
+            if (!betWei) {
+                startButton.disabled = true;
+                if (warning) {
+                    warning.style.display = 'block';
+                    warning.textContent = 'Enter a valid bet amount to begin.';
+                }
+                return;
+            }
+
+            if (!hasKnownBalance) {
+                startButton.disabled = true;
+                if (warning) {
+                    warning.style.display = 'block';
+                    warning.textContent = 'Check your balance before starting the game.';
+                }
+                return;
+            }
+
+            if (lastKnownBalance < betWei) {
+                startButton.disabled = true;
+                if (warning) {
+                    warning.style.display = 'block';
+                    const deficit = betWei - lastKnownBalance;
+                    warning.textContent = `Add at least ${formatUnits(deficit, 18)} ETH (${deficit.toString()} Wei) more to cover this bet.`;
+                }
+                return;
+            }
+
+            startButton.disabled = false;
+            if (warning) { warning.style.display = 'none'; warning.textContent = ''; }
+        }
+
+        function updateDepositButtonState() {
+            const depositButton = document.getElementById('deposit');
+            if (!depositButton) return;
+            const depositWei = getDepositWeiValue();
+            depositButton.disabled = !contract || !depositWei;
+        }
+
+        function updateForceResetButtonState() {
+            const resetButton = document.getElementById('force-reset');
+            if (!resetButton) return;
+            resetButton.disabled = !contract || !currentGameActive;
+        }
+
+        function updateGameControlsVisibility() {
+            const controls = document.getElementById('game-controls');
+            if (!controls) return;
+            controls.style.display = currentGameActive ? 'flex' : 'none';
+        }
+
+        function clearAnimationTimers() {
+            while (animationTimers.length) {
+                clearTimeout(animationTimers.pop());
+            }
+        }
+
+        function clearSuitCache() {
+            suitCache.player = [];
+            suitCache.dealer = [];
+        }
+
+        const SUITS = ['♠️', '♥️', '♦️', '♣️'];
+
+        function getSuit(handKey, index, cardValue) {
+            if (!suitCache[handKey][index]) {
+                const seed = (cardValue * 31 + index * 17) % SUITS.length;
+                suitCache[handKey][index] = SUITS[seed];
+            }
+            return suitCache[handKey][index];
+        }
+
+        function addCardToDisplay(container, handKey, index, cardValue, hidden) {
+            const cardDiv = document.createElement('div');
+            cardDiv.className = 'card';
+
+            if (hidden) {
+                cardDiv.classList.add('hidden');
+                cardDiv.innerHTML = '<div class="card-back"></div>';
+            } else {
+                const suit = getSuit(handKey, index, cardValue);
+                if (suit === '♥️' || suit === '♦️') {
+                    cardDiv.classList.add('red');
+                }
+                const displayValue = cardValueToString(cardValue);
+                cardDiv.innerHTML = `<span>${displayValue}</span><span>${suit}</span>`;
+            }
+
+            cardDiv.style.opacity = '0';
+            cardDiv.style.transform = 'scale(0.9) translateY(-10px)';
+            container.appendChild(cardDiv);
+
+            const timer = setTimeout(() => {
+                requestAnimationFrame(() => {
+                    cardDiv.style.transition = 'all 0.3s ease';
+                    cardDiv.style.opacity = '1';
+                    cardDiv.style.transform = 'scale(1) translateY(0)';
+                });
+            }, index * 120);
+            animationTimers.push(timer);
+        }
+
+        function renderHand({ containerId, handKey, cards, hideHole, score }) {
+            const container = document.getElementById(containerId);
+            const scoreElement = document.getElementById(containerId.replace('cards', 'score'));
+            if (!container || !scoreElement) return;
+
+            container.innerHTML = '';
+            cards.forEach((value, idx) => {
+                const hidden = hideHole && idx === 0;
+                addCardToDisplay(container, handKey, idx, value, hidden);
+            });
+
+            if (hideHole) {
+                scoreElement.textContent = 'Score: ??';
+            } else if (cards.length) {
+                scoreElement.textContent = `Score: ${score}`;
+            } else {
+                scoreElement.textContent = 'Score: -';
+            }
+        }
+
+        function clearCards() {
+            clearAnimationTimers();
+            clearSuitCache();
+            document.getElementById('player-cards').innerHTML = '';
+            document.getElementById('dealer-cards').innerHTML = '';
+            document.getElementById('player-score').textContent = 'Score: -';
+            document.getElementById('dealer-score').textContent = 'Score: -';
+        }
+
+        async function connectWallet() {
+            try {
+                if (typeof window.ethereum === 'undefined') {
+                    alert('Please install MetaMask!');
+                    return;
+                }
+
+                updateStatus('🔗 Connecting wallet...', 'progress');
+
+                provider = new BrowserProvider(window.ethereum);
+                await provider.send('eth_requestAccounts', []);
+                signer = await provider.getSigner();
+                userAddress = await signer.getAddress();
+                
+                document.getElementById('wallet-address').textContent = shortAddress(userAddress);
+                contract = new Contract(contractAddress, contractABI, signer);
+
+                contract.removeAllListeners?.('GameStarted');
+                contract.removeAllListeners?.('GameEnded');
+
+                const checkBalanceBtn = document.getElementById('check-balance');
+                if (checkBalanceBtn) {
+                    checkBalanceBtn.disabled = false;
+                }
+
+                updateDepositWeiDisplay();
+                updateDepositButtonState();
+                updateBetWeiDisplay();
+                updateStartButtonState();
+                updateForceResetButtonState();
+
+                updateStatus('✅ Wallet connected! Check your balance and deposit to start playing.', 'success');
+                await checkBalance();
+                await updateGameDisplay();
+                
+                // Set up event listeners
+                contract.on("GameStarted", (player, betAmount) => {
+                    if (player.toLowerCase() === userAddress.toLowerCase()) {
+                        handleGameStarted();
+                    }
+                });
+                
+                contract.on("GameEnded", (player, result) => {
+                    if (player.toLowerCase() === userAddress.toLowerCase()) {
+                        handleGameEnded(result);
+                    }
+                });
+                
+            } catch (error) {
+                console.error('Error connecting wallet:', error);
+                updateStatus('Failed to connect wallet: ' + error.message, 'error');
+            }
+        }
+
+        async function checkBalance(options = {}) {
+            if (!contract) return;
+
+            const { preserveTable = false } = options;
+
+            try {
+                const balance = await contract.getBalance();
+                lastKnownBalance = balance;
+                hasKnownBalance = true;
+
+                const balanceElement = document.getElementById('balance');
+                if (balanceElement) {
+                    const ethValue = formatUnits(balance, 18);
+                    balanceElement.textContent = `${balance.toString()} Wei (${ethValue} ETH)`;
+                }
+
+                updateDepositButtonState();
+                updateBetWeiDisplay();
+                updateStartButtonState();
+
+                const ethValue = formatUnits(balance, 18);
+                if (!preserveTable) {
+                    updateStatus(`💰 Balance: ${balance.toString()} Wei (${ethValue} ETH)`, 'info');
+                } else {
+                    console.log(`Balance update: ${balance.toString()} Wei (${ethValue} ETH)`);
+                }
+                if (!currentGameActive) {
+                    balanceBeforeRound = balance;
+                }
+                if (preserveTable && lastRoundMessage) {
+                    updateStatus(lastRoundMessage, lastRoundTone);
+            }
+        } catch (error) {
+                console.error('Error checking balance:', error);
+                updateStatus('Failed to check balance: ' + error.message, 'error');
+            }
+        }
+
+        async function deposit() {
+            if (!contract) return;
+
+            const input = document.getElementById('deposit-amount');
+            if (!input) return;
+            const raw = input.value.trim();
+            if (!raw) {
+                alert('Enter a deposit amount in ETH');
+                return;
+            }
+
+            const depositWei = getDepositWeiValue();
+            if (!depositWei) {
+                alert('Invalid deposit amount');
+                return;
+            }
+
+            try {
+                updateStatus(`💳 Processing deposit of ${raw} ETH...`, 'progress');
+                const tx = await contract.deposit({ value: depositWei });
+                await tx.wait();
+
+                updateStatus('✅ Deposit successful!', 'success');
+                updateDepositWeiDisplay();
+                updateDepositButtonState();
+                await checkBalance();
+            } catch (error) {
+                console.error('Error depositing:', error);
+                updateStatus('Deposit failed: ' + error.message, 'error');
+            }
+        }
+
+        async function forceResetGame() {
+            if (!contract) {
+                updateStatus('Connect your wallet first.', 'error');
+                return;
+            }
+
+            try {
+                updateStatus('♻️ Force resetting current round...', 'progress');
+                const tx = await contract.forceReset();
+                await tx.wait();
+
+                await updateGameDisplay();
+                updateStatus('♻️ Round reset. You can start a new game.', 'success');
+                await checkBalance({ preserveTable: true });
+                updateForceResetButtonState();
+                updateStartButtonState();
+                currentBetWei = 0n;
+                lastRoundMessage = '♻️ Round reset. You can start a new game.';
+                lastRoundTone = 'success';
+            } catch (error) {
+                console.error('Error force resetting:', error);
+                const message = (error?.reason || error?.message || 'Force reset failed').toString();
+                if (message.includes('No active game')) {
+                    updateStatus('No active game to reset.', 'info');
+                } else {
+                    updateStatus('Force reset failed: ' + message, 'error');
+                }
+            }
+        }
+
+        async function startGame() {
+            if (!contract) return;
+
+            const betWei = getBetWeiValue();
+            if (!betWei) {
+                alert('Please enter a valid bet amount in ETH');
+                return;
+            }
+
+            try {
+                const betEth = formatUnits(betWei, 18);
+                balanceBeforeRound = lastKnownBalance;
+                currentBetWei = betWei;
+                lastRoundMessage = null;
+                updateStatus(`🎲 Starting game with ${betWei.toString()} Wei (${betEth} ETH)...`, 'progress');
+
+                const tx = await contract.startGameTest(betWei);
+                await tx.wait();
+
+                await updateGameDisplay();
+                updateStatus('🎉 Game started! Dealing cards...', 'progress');
+            } catch (error) {
+                console.error('Error starting game:', error);
+                await updateGameDisplay();
+                currentBetWei = 0n;
+                if (error?.reason && error.reason.includes('Game already in progress')) {
+                    updateStatus('Game already in progress. Finish the round or use Force Reset.', 'error');
+                } else {
+                    updateStatus('Failed to start game: ' + error.message, 'error');
+                }
+            }
+        }
+
+        async function hit() {
+            if (!contract) return;
+            
+            try {
+                updateStatus('🃏 Hitting... waiting for transaction', 'progress');
+                const tx = await contract.hit();
+                await tx.wait();
+                
+                await updateGameDisplay();
+                updateStatus('🎯 Card dealt!', 'success');
+            } catch (error) {
+                console.error('Error hitting:', error);
+                updateStatus('Hit failed: ' + error.message, 'error');
+            }
+        }
+
+        async function stand() {
+            if (!contract) return;
+            
+            try {
+                updateStatus('✋ Standing... Dealer finishing hand', 'progress');
+                const tx = await contract.stand();
+                await tx.wait();
+                
+                await updateGameDisplay();
+                updateStatus('🎲 Game finished!', 'success');
+            } catch (error) {
+                console.error('Error standing:', error);
+                updateStatus('Stand failed: ' + error.message, 'error');
+            }
+        }
+
+        async function updateGameDisplay() {
+            if (!contract) return;
+
+            try {
+                clearAnimationTimers();
+
+                const [playerCardsRaw, playerCountRaw, playerScoreRaw] = await contract.getPlayerCards();
+                const [dealerCardsRaw, dealerCountRaw, dealerScoreRaw] = await contract.getDealerCards();
+                const [isActiveRaw, stateRaw] = await contract.getGameState();
+
+                const playerCount = Number(playerCountRaw);
+                const dealerCount = Number(dealerCountRaw);
+                const playerScore = Number(playerScoreRaw);
+                const dealerScore = Number(dealerScoreRaw);
+                const playerCards = Array.from({ length: playerCount }, (_, i) => Number(playerCardsRaw[i]));
+                const dealerCards = Array.from({ length: dealerCount }, (_, i) => Number(dealerCardsRaw[i]));
+
+                lastPlayerCardCount = playerCount;
+                lastPlayerScore = playerScore;
+
+                const isActive = Boolean(isActiveRaw);
+                const state = Number(stateRaw);
+                currentGameActive = isActive;
+                currentGameState = state;
+                updateGameControlsVisibility();
+                updateForceResetButtonState();
+                updateStartButtonState();
+
+                const hideDealerHole = isActive && state === 1 && dealerCards.length > 0;
+
+                renderHand({
+                    containerId: 'player-cards',
+                    handKey: 'player',
+                    cards: playerCards,
+                    hideHole: false,
+                    score: playerScore
+                });
+
+                renderHand({
+                    containerId: 'dealer-cards',
+                    handKey: 'dealer',
+                    cards: dealerCards,
+                    hideHole: hideDealerHole,
+                    score: dealerScore
+                });
+
+                if (hideDealerHole) {
+                    setTableStatus('Dealer holds a hidden card...', 'progress');
+                } else {
+                    let tone = 'info';
+                    let message = dealerCards.length ? 'Hands updated.' : 'Waiting for cards...';
+
+                    if (!isActive) {
+                        switch (state) {
+                            case 2:
+                                tone = 'success';
+                                message = '🎉 You win this round!';
+                                break;
+                            case 3:
+                                tone = 'error';
+                                message = 'Dealer wins this round.';
+                                break;
+                            case 4:
+                                message = 'Round ended in a push.';
+                                break;
+                            default:
+                                message = 'Waiting for a new game.';
+                        }
+                    }
+
+                    setTableStatus(message, tone);
+                }
+            } catch (error) {
+                console.error('Error updating game display:', error);
+            }
+        }
+
+        async function handleGameStarted() {
+            currentGameActive = true;
+            updateGameControlsVisibility();
+            updateForceResetButtonState();
+            document.getElementById('start-game').disabled = true;
+            clearAnimationTimers();
+            clearSuitCache();
+            lastRoundMessage = null;
+            clearCards();
+            setTableStatus('Cards incoming...', 'progress');
+            
+            // Wait a moment then update display
+            setTimeout(async () => {
+                await updateGameDisplay();
+            }, 500);
+        }
+
+        async function handleGameEnded(resultRaw) {
+            const result = Number(resultRaw);
+            currentGameActive = false;
+            updateGameControlsVisibility();
+            updateForceResetButtonState();
+            document.getElementById('start-game').disabled = false;
+
+            await updateGameDisplay();
+            
+            let resultText;
+            switch(result) {
+                case 2:
+                    resultText = "🎉 YOU WIN! 🎉";
+                    break;
+                case 3:
+                    resultText = "😔 DEALER WINS 😔";
+                    break;
+                case 4:
+                    resultText = "🤝 PUSH - TIE GAME 🤝";
+                    break;
+                default:
+                    resultText = "Game finished";
+            }
+
+            const betUsed = currentBetWei;
+            let deltaWei = 0n;
+
+            if (betUsed > 0n) {
+                if (result === 2) {
+                    deltaWei = betUsed;
+                    if (lastPlayerScore === 21 && lastPlayerCardCount === 2) {
+                        deltaWei += (betUsed * 3n) / 2n;
+                    }
+                } else if (result === 3) {
+                    deltaWei = -betUsed;
+                }
+            }
+
+            if (deltaWei !== 0n) {
+                const isGain = deltaWei > 0n;
+                const absWei = isGain ? deltaWei : -deltaWei;
+                const deltaEth = formatUnits(absWei, 18);
+                resultText += ` (${isGain ? '+' : '-'}${deltaEth} ETH)`;
+            } else if (result === 4 && betUsed > 0n) {
+                resultText += ' (bet returned)';
+            }
+
+            const tone = result === 2 ? 'success' : result === 3 ? 'error' : 'info';
+            updateStatus(resultText, tone);
+            lastRoundMessage = resultText;
+            lastRoundTone = tone;
+
+            // Update balance after game
+            setTimeout(async () => {
+                await checkBalance({ preserveTable: true });
+            }, 1000);
+
+            currentBetWei = 0n;
+        }
+
+        // Event listeners
+        document.getElementById('connect-wallet').addEventListener('click', connectWallet);
+        document.getElementById('check-balance').addEventListener('click', checkBalance);
+        document.getElementById('deposit').addEventListener('click', deposit);
+        document.getElementById('start-game').addEventListener('click', startGame);
+        document.getElementById('hit').addEventListener('click', hit);
+        document.getElementById('stand').addEventListener('click', stand);
+        document.getElementById('force-reset').addEventListener('click', forceResetGame);
+        
+        // Update start game button when bet amount changes
+        document.getElementById('bet-amount').addEventListener('input', () => {
+            updateBetWeiDisplay();
+            updateStartButtonState();
+        });
+
+        const depositInput = document.getElementById('deposit-amount');
+        if (depositInput) {
+            depositInput.addEventListener('input', () => {
+                updateDepositWeiDisplay();
+            });
+        }
+
+        updateDepositWeiDisplay();
+        updateBetWeiDisplay();
+        updateStartButtonState();
+        updateForceResetButtonState();
+        updateGameControlsVisibility();
+        setTableStatus(document.getElementById('status').textContent, 'info');
+    </script>
+</body>
+</html>

@@ -1,0 +1,42 @@
+{
+  "name": "fhe-blackjack",
+  "version": "1.0.0",
+  "description": "FHE-powered blackjack game with encrypted cards",
+  "main": "index.js",
+  "scripts": {
+    "start": "npm run prepare-wasm && npx http-server . -p 3000 -o --cors",
+    "setup": "npm install --legacy-peer-deps && npm run prepare-wasm && cp .env.example .env",
+    "compile": "hardhat compile",
+    "deploy": "hardhat run scripts/deploy.js --network localhost",
+    "deploy-sepolia": "hardhat run scripts/deploy.js --network sepolia",
+    "deploy-test": "hardhat run scripts/deploy-test.js --network sepolia",
+    "node": "hardhat node",
+    "prepare-wasm": "node scripts/prepare-wasm.js",
+    "dev": "npm run prepare-wasm && npx http-server . -p 3000 -o --cors",
+    "serve": "npm run prepare-wasm && npx http-server . -p 3000 -o --cors"
+  },
+  "keywords": [
+    "fhe",
+    "zama",
+    "blackjack",
+    "privacy",
+    "blockchain"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "@fhevm/hardhat-plugin": "^0.0.1-6",
+    "@fhevm/mock-utils": "^0.0.1-6",
+    "@zama-fhe/oracle-solidity": "^0.1.0",
+    "dotenv": "^16.3.1",
+    "ethers": "^6.14.3",
+    "hardhat": "^2.25.0",
+    "http-server": "^14.1.1"
+  },
+  "dependencies": {
+    "@fhevm/solidity": "^0.7.0",
+    "@nomicfoundation/hardhat-ethers": "^3.0.9",
+    "@zama-fhe/relayer-sdk": "^0.3.0-2"
+  },
+  "type": "module"
+}
