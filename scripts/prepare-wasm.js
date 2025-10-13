@@ -3,7 +3,7 @@ import path from 'path';
 
 const BUNDLE_DIR = path.resolve('node_modules/@zama-fhe/relayer-sdk/bundle');
 const TARGET_DIR = process.cwd();
-const FILES = ['tfhe_bg.wasm', 'kms_lib_bg.wasm'];
+const FILES = ['tfhe_bg.wasm', 'kms_lib_bg.wasm', 'relayer-sdk-js.js', 'workerHelpers.js'];
 
 function copyFile(filename) {
   const source = path.join(BUNDLE_DIR, filename);

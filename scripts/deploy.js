@@ -35,20 +35,27 @@ async function main() {
       return;
     }
 
-    const contractPath = path.join(process.cwd(), 'artifacts/contracts/FHEBlackjack.sol/FHEBlackjack.json');
+    const contractPath = path.join(
+      process.cwd(),
+      'artifacts/contracts/FHEBlackjackGateway.sol/FHEBlackjackGateway.json'
+    );
     if (!fs.existsSync(contractPath)) {
       throw new Error("Contract not compiled. Run 'npm run compile' first.");
     }
 
     const contractJson = JSON.parse(fs.readFileSync(contractPath, 'utf8'));
-    const contractFactory = new ethers.ContractFactory(contractJson.abi, contractJson.bytecode, deployer);
+    const contractFactory = new ethers.ContractFactory(
+      contractJson.abi,
+      contractJson.bytecode,
+      deployer
+    );
 
     console.log('🚀 Deploying contract...');
     const blackjack = await contractFactory.deploy();
     await blackjack.waitForDeployment();
     const address = await blackjack.getAddress();
 
-    console.log('🎉 FHEBlackjack deployed to:', address);
+    console.log('🎉 FHEBlackjackGateway deployed to:', address);
 
     const indexPath = path.join(process.cwd(), 'index.html');
     if (fs.existsSync(indexPath)) {

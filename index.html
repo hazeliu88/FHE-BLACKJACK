@@ -69,6 +69,36 @@
             align-items: flex-end;
         }
 
+        .mode-toggle {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            align-items: flex-end;
+        }
+
+        .mode-toggle label {
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+            font-size: 0.75em;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .mode-toggle select {
+            min-width: 220px;
+            padding: 8px 12px;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            background: rgba(255, 255, 255, 0.08);
+            color: #e1e8f0;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .mode-toggle select:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
         .wallet-summary {
             display: flex;
             gap: 8px;
@@ -89,6 +119,15 @@
 
         .wallet-buttons button {
             min-width: 150px;
+        }
+
+        #connect-wallet.connected {
+            background: linear-gradient(135deg, #4caf50, #2e7d32);
+            color: #fff;
+        }
+
+        #connect-wallet.connected:hover:not(:disabled) {
+            box-shadow: 0 8px 25px rgba(76, 175, 80, 0.35);
         }
 
         .info-banner {
@@ -213,6 +252,11 @@
             flex: 0 0 160px;
         }
 
+        .settle-button {
+            background: linear-gradient(135deg, #ff9800, #f57c00);
+            color: #fff;
+        }
+
         .force-reset {
             background: linear-gradient(135deg, #4e9a51, #2f6f35);
             color: #fff;
@@ -278,6 +322,54 @@
             font-size: 0.85em;
             color: #ffd700;
             opacity: 0.8;
+        }
+
+        #bet-verification-status {
+            margin-top: 12px;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 0.9em;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        #bet-verification-status[data-status="encrypting"],
+        #bet-verification-status[data-status="submitting"],
+        #bet-verification-status[data-status="verifying"] {
+            background-color: rgba(255, 215, 0, 0.1);
+            color: #ffd700;
+        }
+
+        #bet-verification-status[data-status="success"] {
+            background-color: rgba(76, 175, 80, 0.15);
+            color: #7cff9c;
+        }
+
+        #bet-verification-status[data-status="error"] {
+            background-color: rgba(214, 75, 75, 0.15);
+            color: #ff6b6b;
+        }
+
+        .pending-warning {
+            display: none;
+            margin-top: 10px;
+            padding: 12px 16px;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            font-size: 0.95em;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .pending-warning[data-tone="progress"] {
+            color: #ffd700;
+        }
+
+        .pending-warning[data-tone="info"] {
+            color: #7cff9c;
+        }
+
+        .pending-warning[data-tone="error"] {
+            color: #ff6b6b;
         }
 
         .warning {
@@ -427,6 +519,180 @@
         .improvement-note li {
             margin: 5px 0;
         }
+
+        .audit-panel {
+            margin-top: 40px;
+            padding: 28px;
+            border-radius: 16px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            box-shadow: 0 12px 28px rgba(0, 0, 0, 0.25);
+        }
+
+        .audit-panel h2 {
+            margin: 0 0 10px 0;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.4em;
+            letter-spacing: 0.5px;
+        }
+
+        .audit-description {
+            margin: 0 0 18px 0;
+            color: rgba(255, 255, 255, 0.75);
+            font-size: 0.95em;
+        }
+
+        .audit-recent {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            padding: 10px 14px;
+            border-radius: 12px;
+            background: rgba(52, 152, 219, 0.08);
+            border: 1px solid rgba(52, 152, 219, 0.18);
+            margin-bottom: 18px;
+            flex-wrap: wrap;
+        }
+
+        .audit-recent-info {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .audit-recent-info code {
+            font-size: 0.9em;
+            padding: 4px 8px;
+            background: rgba(10, 14, 22, 0.6);
+            border-radius: 6px;
+            color: #a8d8ff;
+        }
+
+        .audit-recent button {
+            background: linear-gradient(135deg, #3498db, #2ecc71);
+            border: none;
+            color: #fff;
+            padding: 6px 14px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: transform 0.15s ease;
+        }
+
+        .audit-recent button:hover:not(:disabled) {
+            transform: translateY(-1px);
+        }
+
+        .audit-recent button:disabled {
+            opacity: 0.55;
+            cursor: not-allowed;
+        }
+
+        .audit-grid {
+            display: grid;
+            gap: 16px;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        }
+
+        .audit-field {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .audit-field label {
+            font-size: 0.85em;
+            letter-spacing: 0.4px;
+            text-transform: uppercase;
+            color: rgba(255, 255, 255, 0.65);
+        }
+
+        .audit-field input {
+            padding: 10px 12px;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: rgba(15, 20, 25, 0.6);
+            color: #e1e8f0;
+            font-size: 0.95em;
+        }
+
+        .audit-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 18px;
+        }
+
+        .audit-actions button {
+            min-width: 200px;
+        }
+
+        .audit-status {
+            margin-top: 16px;
+            padding: 10px 14px;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.04);
+            font-size: 0.95em;
+            color: rgba(255, 255, 255, 0.75);
+        }
+
+        .audit-status[data-tone="progress"] {
+            color: #ffd700;
+        }
+
+        .audit-status[data-tone="success"] {
+            color: #7cff9c;
+        }
+
+        .audit-status[data-tone="error"] {
+            color: #ff6b6b;
+        }
+
+        .audit-results {
+            margin-top: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .audit-event {
+            padding: 16px;
+            border-radius: 12px;
+            background: rgba(17, 26, 38, 0.85);
+            border: 1px solid rgba(124, 77, 255, 0.25);
+        }
+
+        .audit-event-heading {
+            font-weight: 600;
+            margin-bottom: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .audit-event-meta {
+            font-size: 0.85em;
+            color: rgba(255, 255, 255, 0.6);
+            word-break: break-all;
+            margin-bottom: 8px;
+        }
+
+        .audit-event-notes {
+            margin: 0;
+            padding-left: 18px;
+            color: rgba(225, 232, 240, 0.85);
+            font-size: 0.92em;
+        }
+
+        .audit-empty {
+            padding: 16px;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            color: rgba(255, 255, 255, 0.75);
+            font-size: 0.95em;
+        }
     </style>
 </head>
 <body>
@@ -444,6 +710,13 @@
                 <div class="wallet-summary">
                     <span class="wallet-label">Balance:</span>
                     <span id="balance">-</span>
+                </div>
+                <div class="mode-toggle">
+                    <label for="game-mode">Gameplay Mode</label>
+                    <select id="game-mode">
+                        <option value="legacy">Legacy – step-by-step reveal</option>
+                        <option value="batch">Batch – single settlement</option>
+                    </select>
                 </div>
                 <div class="wallet-buttons">
                     <button id="connect-wallet">🔗 Connect Wallet</button>
@@ -463,6 +736,7 @@
         </div>
 
         <div class="status" id="status">Connect your wallet to begin.</div>
+        <div class="pending-warning" id="pending-warning"></div>
 
         <div class="play-layout">
             <div class="action-panel">
@@ -486,6 +760,7 @@
                         <button id="start-game" disabled>🎲 Start Game</button>
                         <button id="force-reset" class="force-reset" disabled>♻️ Force Reset</button>
                     </div>
+                    <div id="bet-verification-status" style="display: none;"></div>
                 </div>
             </div>
 
@@ -512,28 +787,640 @@
         <div class="controls game-controls" id="game-controls">
             <button id="hit">🃏 Hit</button>
             <button id="stand">✋ Stand</button>
+            <button id="settle" class="settle-button" style="display: none;">🧾 Settle Round</button>
+        </div>
+
+        <div class="audit-panel">
+            <h2>🔍 Fairness Audit</h2>
+            <p class="audit-description">Query Sepolia logs to verify every card reveal and settlement backed by the Zama Gateway.</p>
+            <div class="audit-recent">
+                <div class="audit-recent-info">
+                    <span>Last transaction:</span>
+                    <span id="last-tx-label">None yet</span>
+                    <code id="last-tx-hash">--</code>
+                </div>
+                <button id="use-last-tx" disabled>Use in audit</button>
+            </div>
+            <div class="audit-grid">
+                <div class="audit-field">
+                    <label for="audit-player">Player Address</label>
+                    <input id="audit-player" type="text" placeholder="0x..." autocomplete="off">
+                </div>
+                <div class="audit-field">
+                    <label for="audit-tx">Transaction Hash</label>
+                    <input id="audit-tx" type="text" placeholder="0x..." autocomplete="off">
+                </div>
+                <div class="audit-field">
+                    <label for="audit-from">From Block (optional)</label>
+                    <input id="audit-from" type="number" min="0" placeholder="auto">
+                </div>
+                <div class="audit-field">
+                    <label for="audit-to">To Block (optional)</label>
+                    <input id="audit-to" type="number" min="0" placeholder="latest">
+                </div>
+            </div>
+            <div class="audit-actions">
+                <button id="audit-player-btn">Query Player Rounds</button>
+                <button id="audit-tx-btn">Inspect Transaction</button>
+            </div>
+            <div id="audit-status" class="audit-status" data-tone="info">Enter a player address or transaction hash to begin.</div>
+            <div id="audit-results" class="audit-results"></div>
         </div>
     </div>
 
     <script type="module">
-        import { BrowserProvider, Contract, formatUnits, parseEther } from "https://cdn.jsdelivr.net/npm/ethers@6.7.0/+esm";
-        const contractAddress = "0x71BAdaee4889fe2171A96A43367539953b0f7dD6";
-        const contractABI = [
-            "function deposit() external payable",
-            "function startGameTest(uint256 betAmount) external",
-            "function hit() external", 
-            "function stand() external",
-            "function forceReset() external",
-            "function getBalance() external view returns (uint256)",
-            "function getGameState() external view returns (bool isActive, uint8 state)",
-            "function getPlayerCards() external view returns (uint8[] memory cards, uint8 count, uint8 score)",
-            "function getDealerCards() external view returns (uint8[] memory cards, uint8 count, uint8 score)",
-            "function getGameDetails() external view returns (bool isActive, uint8 state, uint8 playerScore, uint8 dealerScore, uint8 playerCardCount, uint8 dealerCardCount)",
-            "event GameStarted(address indexed player, uint256 betAmount)",
-            "event GameEnded(address indexed player, uint8 result)",
-            "event Deposit(address indexed player, uint256 amount)",
-            "event CardDealt(address indexed player, bool isPlayer, uint8 card)"
-        ];
+        import { BrowserProvider, Contract, JsonRpcProvider, formatUnits, parseEther, hexlify, isAddress } from "https://cdn.jsdelivr.net/npm/ethers@6.7.0/+esm";
+        const legacyContractAddress = "0xF302195B5F1E4Ebf97B0E956Cf10a28C1c969D18"; // Updated by deploy script
+        const legacyContractABI = [
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "player",
+          "type": "address"
+        }
+      ],
+      "name": "GameInProgress",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "HandlesAlreadySavedForRequestID",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "InvalidKMSSignatures",
+      "type": "error"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "requestId",
+          "type": "uint256"
+        }
+      ],
+      "name": "InvalidReveal",
+      "type": "error"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "player",
+          "type": "address"
+        }
+      ],
+      "name": "NoActiveGame",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "NoHandleFoundForRequestID",
+      "type": "error"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "requestId",
+          "type": "uint256"
+        }
+      ],
+      "name": "RevealPending",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "UnsupportedHandleType",
+      "type": "error"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint8",
+          "name": "action",
+          "type": "uint8"
+        }
+      ],
+      "name": "UnsupportedRevealAction",
+      "type": "error"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "player",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint8",
+          "name": "cardValue",
+          "type": "uint8"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint8",
+          "name": "cardIndex",
+          "type": "uint8"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint8",
+          "name": "newScore",
+          "type": "uint8"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "requestId",
+          "type": "uint256"
+        }
+      ],
+      "name": "DealerCardRevealed",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "uint256",
+          "name": "requestID",
+          "type": "uint256"
+        }
+      ],
+      "name": "DecryptionFulfilled",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "player",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "amount",
+          "type": "uint256"
+        }
+      ],
+      "name": "Deposit",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "player",
+          "type": "address"
+        }
+      ],
+      "name": "ForceReset",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "player",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "betAmount",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "requestId",
+          "type": "uint256"
+        }
+      ],
+      "name": "GameStarted",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "player",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint8",
+          "name": "playerCardOne",
+          "type": "uint8"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint8",
+          "name": "playerCardTwo",
+          "type": "uint8"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint8",
+          "name": "dealerUpCard",
+          "type": "uint8"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "requestId",
+          "type": "uint256"
+        }
+      ],
+      "name": "InitialHandRevealed",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "player",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "claimedAmount",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "revealedAmount",
+          "type": "uint256"
+        }
+      ],
+      "name": "InvalidBetReveal",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "player",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "bool",
+          "name": "isPlayerHand",
+          "type": "bool"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint8",
+          "name": "cardIndex",
+          "type": "uint8"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "requestId",
+          "type": "uint256"
+        }
+      ],
+      "name": "DuplicateCardResampled",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "player",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint8",
+          "name": "cardValue",
+          "type": "uint8"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint8",
+          "name": "cardIndex",
+          "type": "uint8"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint8",
+          "name": "newScore",
+          "type": "uint8"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "requestId",
+          "type": "uint256"
+        }
+      ],
+      "name": "PlayerCardRevealed",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "player",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint8",
+          "name": "result",
+          "type": "uint8"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "payout",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint8",
+          "name": "playerScore",
+          "type": "uint8"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint8",
+          "name": "dealerScore",
+          "type": "uint8"
+        }
+      ],
+      "name": "RoundSettled",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "player",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "amount",
+          "type": "uint256"
+        }
+      ],
+      "name": "Withdrawal",
+      "type": "event"
+    },
+    {
+      "inputs": [],
+      "name": "deposit",
+      "outputs": [],
+      "stateMutability": "payable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "forceReset",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getBalance",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getDealerVisibleCards",
+      "outputs": [
+        {
+          "internalType": "uint8[]",
+          "name": "cards",
+          "type": "uint8[]"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getGameState",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "isActive",
+          "type": "bool"
+        },
+        {
+          "internalType": "uint8",
+          "name": "state",
+          "type": "uint8"
+        },
+        {
+          "internalType": "uint8",
+          "name": "playerScore",
+          "type": "uint8"
+        },
+        {
+          "internalType": "uint8",
+          "name": "dealerUpCard",
+          "type": "uint8"
+        },
+        {
+          "internalType": "uint8",
+          "name": "playerCardCount",
+          "type": "uint8"
+        },
+        {
+          "internalType": "uint8",
+          "name": "dealerCardCount",
+          "type": "uint8"
+        },
+        {
+          "internalType": "uint256",
+          "name": "pendingRequestId",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getPlayerCards",
+      "outputs": [
+        {
+          "internalType": "uint8[]",
+          "name": "cards",
+          "type": "uint8[]"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "hit",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "requestId",
+          "type": "uint256"
+        },
+        {
+          "internalType": "bytes",
+          "name": "cleartexts",
+          "type": "bytes"
+        },
+        {
+          "internalType": "bytes[]",
+          "name": "signatures",
+          "type": "bytes[]"
+        }
+      ],
+      "name": "onReveal",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "stand",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "betAmountWei",
+          "type": "uint256"
+        },
+        {
+          "internalType": "externalEuint128",
+          "name": "encryptedBetAmount",
+          "type": "bytes32"
+        },
+        {
+          "internalType": "bytes",
+          "name": "inputProof",
+          "type": "bytes"
+        }
+      ],
+      "name": "startGame",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "amount",
+          "type": "uint256"
+        }
+      ],
+      "name": "withdraw",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    }
+  ];
+
+        const batchContractAddress = "0x71297d478d995327C9d075Ad433886f1EB7b1456"; // Update after deploying FHEBlackjackBatch
+        const batchContractArtifact = await (await fetch('artifacts/contracts/FHEBlackjackBatch.sol/FHEBlackjackBatch.json')).json();
+        const batchContractABI = batchContractArtifact.abi;
+
+        const CONTRACT_CONFIG = {
+            legacy: {
+                address: legacyContractAddress,
+                abi: legacyContractABI,
+                label: 'Legacy – step-by-step reveal'
+            },
+            batch: {
+                address: batchContractAddress,
+                abi: batchContractABI,
+                label: 'Batch – single settlement',
+                experimental: false
+            }
+        };
+
+        const AUDIT_EVENT_CONFIG = {
+            legacy: [
+                'GameStarted',
+                'InitialHandRevealed',
+                'PlayerCardRevealed',
+                'DealerCardRevealed',
+                'RoundSettled',
+                'InvalidBetReveal',
+                'ForceReset'
+            ],
+            batch: [
+                'BatchGameStarted',
+                'PlayerCardPrepared',
+                'DealerUpCardPrepared',
+                'PlayerCardConsumed',
+                'GameStanding',
+                'SettlementRequested',
+                'RoundSettled',
+                'SettlementFailed'
+            ]
+        };
+
+        let currentMode = 'legacy';
+        let contractAddress = CONTRACT_CONFIG[currentMode].address;
+        let contractABI = CONTRACT_CONFIG[currentMode].abi;
+        let contractAddressLower = contractAddress.toLowerCase();
 
         let provider, signer, contract, userAddress;
         let lastKnownBalance = 0n;
@@ -542,12 +1429,483 @@
         const suitCache = { player: [], dealer: [] };
         let currentGameActive = false;
         let currentGameState = 0;
+        let pendingRequestId = 0n;
         let currentBetWei = 0n;
-        let balanceBeforeRound = 0n;
-        let lastPlayerCardCount = 0;
-        let lastPlayerScore = 0;
+        let lastPlayerKnownScore = 0;
+        let lastDealerKnownScore = null;
         let lastRoundMessage = null;
         let lastRoundTone = 'info';
+        let relayerClient = null;
+        let relayerReady = false;
+        let relayerInitPromise = null;
+        let relayerInitError = null;
+        let relayerInitializing = false;
+        let experimentalModeActive = CONTRACT_CONFIG[currentMode].experimental === true;
+        const PENDING_WARNING_MS = 15000;
+        const PENDING_ALERT_MS = 45000;
+        let pendingSinceTimestamp = null;
+        let pendingTimerHandle = null;
+        let walletConnected = false;
+
+        const DEFAULT_RPC_URL = 'https://ethereum-sepolia-rpc.publicnode.com';
+        const auditProvider = new JsonRpcProvider(DEFAULT_RPC_URL);
+        let auditContract = new Contract(contractAddress, contractABI, auditProvider);
+        const AUDIT_DEFAULT_LOOKBACK = 2000;
+        let auditInFlight = false;
+
+        const auditElements = {
+            player: document.getElementById('audit-player'),
+            tx: document.getElementById('audit-tx'),
+            from: document.getElementById('audit-from'),
+            to: document.getElementById('audit-to'),
+            status: document.getElementById('audit-status'),
+            results: document.getElementById('audit-results')
+        };
+
+        const auditButtons = [
+            document.getElementById('audit-player-btn'),
+            document.getElementById('audit-tx-btn')
+        ];
+        const recentTxLabelEl = document.getElementById('last-tx-label');
+        const recentTxHashEl = document.getElementById('last-tx-hash');
+        const useLastTxBtn = document.getElementById('use-last-tx');
+        let latestTxHash = '';
+        let latestTxLabel = '';
+
+        const ZERO_HANDLE = '0x0000000000000000000000000000000000000000000000000000000000000000';
+        const GAME_PHASE = {
+            Idle: 0,
+            Active: 1,
+            AwaitingSettlement: 2,
+            Settling: 3
+        };
+
+        let batchState = {
+            decrypted: new Map(),
+            playerHandles: [],
+            dealerHandles: [],
+            phase: GAME_PHASE.Idle,
+            nextSlot: 0,
+            pendingId: 0n,
+            settleAvailableAt: 0,
+            playerCardCount: 0,
+            lastPlayerCardCount: 0,
+            lastDealerCardCount: 0,
+            cachedPlayerCards: [],
+            cachedDealerCards: []
+        };
+        let userDecryptSession = null;
+        let userDecryptSessionPromise = null;
+        let depositInFlight = false;
+        let startGameInFlight = false;
+        let actionInFlight = false;
+        let settleInFlight = false;
+
+        function getModeConfig(mode = currentMode) {
+            return CONTRACT_CONFIG[mode] || CONTRACT_CONFIG.legacy;
+        }
+
+        function normalizeHandle(handle) {
+            if (!handle) return ZERO_HANDLE;
+            if (typeof handle === 'string') {
+                const lowered = handle.toLowerCase();
+                if (lowered === '0x' || lowered === '0x0' || lowered === ZERO_HANDLE) {
+                    return ZERO_HANDLE;
+                }
+                const withoutPrefix = lowered.startsWith('0x') ? lowered.slice(2) : lowered;
+                if (withoutPrefix.length < 64) {
+                    return '0x' + withoutPrefix.padStart(64, '0');
+                }
+                return lowered.startsWith('0x') ? lowered : `0x${withoutPrefix}`;
+            }
+            if (handle.toHexString) {
+                return normalizeHandle(handle.toHexString());
+            }
+            return ZERO_HANDLE;
+        }
+
+        function resetBatchState() {
+            batchState = {
+                decrypted: new Map(),
+                playerHandles: [],
+                dealerHandles: [],
+                phase: GAME_PHASE.Idle,
+                nextSlot: 0,
+                pendingId: 0n,
+                settleAvailableAt: 0,
+                playerCardCount: 0,
+                lastPlayerCardCount: 0,
+                lastDealerCardCount: 0,
+                cachedPlayerCards: [],
+                cachedDealerCards: []
+            };
+        }
+
+        function resetUserDecryptSession() {
+            userDecryptSession = null;
+            userDecryptSessionPromise = null;
+        }
+
+        function resetGameStateForMode() {
+            currentGameActive = false;
+            currentGameState = 0;
+            pendingRequestId = 0n;
+            currentBetWei = 0n;
+            lastPlayerKnownScore = 0;
+            lastDealerKnownScore = null;
+            lastRoundMessage = null;
+            lastRoundTone = 'info';
+            startGameInFlight = false;
+            depositInFlight = false;
+            actionInFlight = false;
+            settleInFlight = false;
+            clearCards();
+            updateGameControlsVisibility();
+            updateForceResetButtonState();
+            updateStartButtonState();
+            updateActionButtonsState();
+            resetBatchState();
+            resetUserDecryptSession();
+            updateDepositButtonState();
+        }
+
+        async function ensureRelayerReady() {
+            if (!relayerReady || !relayerClient) {
+                await initializeRelayer();
+            }
+            if (!relayerReady || !relayerClient) {
+                throw new Error('Relayer not initialized');
+            }
+        }
+
+        async function ensureUserDecryptSession() {
+            if (!walletConnected || !signer || !userAddress) {
+                throw new Error('Connect wallet to decrypt cards.');
+            }
+
+            const now = Math.floor(Date.now() / 1000);
+            if (
+                userDecryptSession &&
+                userDecryptSession.contractAddress === contractAddress &&
+                userDecryptSession.mode === currentMode &&
+                now < userDecryptSession.expiresAt - 30
+            ) {
+                return userDecryptSession;
+            }
+
+            if (userDecryptSessionPromise) {
+                return userDecryptSessionPromise;
+            }
+
+            userDecryptSessionPromise = (async () => {
+                await ensureRelayerReady();
+
+                const { publicKey, privateKey } = relayerClient.generateKeypair();
+                const startTimestamp = now - 60;
+                const durationDays = 1;
+                const eip712 = relayerClient.createEIP712(
+                    publicKey,
+                    [contractAddress],
+                    startTimestamp,
+                    durationDays
+                );
+
+                const domain = eip712.domain;
+                const types = { ...eip712.types };
+                delete types.EIP712Domain;
+                const signature = await signer.signTypedData(domain, types, eip712.message);
+
+                userDecryptSession = {
+                    publicKey,
+                    privateKey,
+                    signature,
+                    startTimestamp,
+                    durationDays,
+                    expiresAt: startTimestamp + durationDays * 86400,
+                    contractAddress,
+                    mode: currentMode
+                };
+
+                return userDecryptSession;
+            })();
+
+            try {
+                return await userDecryptSessionPromise;
+            } catch (error) {
+                resetUserDecryptSession();
+                throw error;
+            } finally {
+                userDecryptSessionPromise = null;
+            }
+        }
+
+        async function decryptHandles(handles) {
+            const normalized = Array.from(new Set(
+                handles
+                    .map(normalizeHandle)
+                    .filter((handle) => handle && handle !== ZERO_HANDLE)
+            ));
+
+            const pending = normalized.filter((handle) => !batchState.decrypted.has(handle));
+            if (!pending.length) {
+                return;
+            }
+
+            await ensureRelayerReady();
+            const session = await ensureUserDecryptSession();
+
+            const handlePairs = pending.map((handle) => ({
+                handle,
+                contractAddress
+            }));
+
+            try {
+                const result = await relayerClient.userDecrypt(
+                    handlePairs,
+                    session.privateKey,
+                    session.publicKey,
+                    session.signature,
+                    [contractAddress],
+                    userAddress,
+                    session.startTimestamp,
+                    session.durationDays
+                );
+
+                Object.entries(result || {}).forEach(([handle, value]) => {
+                    const parsedHandle = normalizeHandle(handle);
+                    if (!parsedHandle || parsedHandle === ZERO_HANDLE) {
+                        return;
+                    }
+                    const numeric = Number(value);
+                    if (!Number.isNaN(numeric)) {
+                        batchState.decrypted.set(parsedHandle, numeric);
+                    }
+                });
+            } catch (error) {
+                console.error('[batch] userDecrypt failed', error);
+                throw error;
+            }
+        }
+
+        function announceModeSelection() {
+            const config = getModeConfig();
+            const prefix = config.experimental ? '⚗️ Experimental mode:' : '🎮 Mode:';
+            const message = `${prefix} ${config.label || currentMode}.`;
+            updateStatus(message, config.experimental ? 'info' : 'success', !walletConnected);
+            if (config.experimental) {
+                setTableStatus('Batch mode preview – gameplay will unlock in a later update.', 'info');
+            } else if (currentMode === 'batch') {
+                setTableStatus('Batch mode active. Cards decrypt locally after each hit.', 'info');
+            }
+        }
+
+        function setupLegacyListeners(listenerAddress) {
+            if (!contract) return;
+            contract.on('GameStarted', (player, betAmount, requestId) => {
+                if (player.toLowerCase() === listenerAddress) {
+                    handleGameStartedEvent(betAmount, requestId);
+                }
+            });
+
+            contract.on('InitialHandRevealed', (player, cardOne, cardTwo, dealerUp, requestId) => {
+                if (player.toLowerCase() === listenerAddress) {
+                    handleInitialHandRevealed(cardOne, cardTwo, dealerUp, requestId);
+                }
+            });
+
+            contract.on('PlayerCardRevealed', (player, cardValue, cardIndex, newScore, requestId) => {
+                if (player.toLowerCase() === listenerAddress) {
+                    handlePlayerCardRevealed(cardValue, cardIndex, newScore, requestId);
+                }
+            });
+
+            contract.on('DealerCardRevealed', (player, cardValue, cardIndex, newScore, requestId) => {
+                if (player.toLowerCase() === listenerAddress) {
+                    handleDealerCardRevealed(cardValue, cardIndex, newScore, requestId);
+                }
+            });
+
+            contract.on('RoundSettled', (player, result, payout, playerScore, dealerScore) => {
+                if (player.toLowerCase() === listenerAddress) {
+                    handleRoundSettledEvent(result, payout, playerScore, dealerScore);
+                }
+            });
+
+            contract.on('ForceReset', (player) => {
+                if (player.toLowerCase() === listenerAddress) {
+                    handleForceResetEvent();
+                }
+            });
+
+            contract.on('InvalidBetReveal', (player, claimed, revealed) => {
+                if (player.toLowerCase() === listenerAddress) {
+                    handleInvalidBetReveal(claimed, revealed);
+                }
+            });
+
+            contract.on('DuplicateCardResampled', (player, isPlayerHand, cardIndex, requestId) => {
+                if (player.toLowerCase() === listenerAddress) {
+                    setPendingRequestId(BigInt(requestId));
+                    const handLabel = isPlayerHand ? 'player' : 'dealer';
+                    const slotLabel = Number(cardIndex);
+                    const message = `♻️ Duplicate ${handLabel} card detected (slot ${slotLabel}). Requesting replacement...`;
+                    updateStatus(message, 'progress', true);
+                    setTableStatus(message, 'progress');
+                }
+            });
+        }
+
+        function setupBatchListeners(listenerAddress) {
+            if (!contract) return;
+
+            contract.on('BatchGameStarted', (player, betAmount, deckDigest) => {
+                if (player.toLowerCase() === listenerAddress) {
+                    handleBatchGameStarted(betAmount, deckDigest);
+                }
+            });
+
+            contract.on('PlayerCardPrepared', (player, slot, handle, totalCards) => {
+                if (player.toLowerCase() === listenerAddress) {
+                    handleBatchPlayerCardPrepared(Number(slot), handle, Number(totalCards));
+                }
+            });
+
+            contract.on('DealerUpCardPrepared', (player, handle) => {
+                if (player.toLowerCase() === listenerAddress) {
+                    handleBatchDealerUpCardPrepared(handle);
+                }
+            });
+
+            contract.on('PlayerCardConsumed', (player, slot, handle, totalCards) => {
+                if (player.toLowerCase() === listenerAddress) {
+                    handleBatchPlayerCardConsumed(Number(slot), handle, Number(totalCards));
+                }
+            });
+
+            contract.on('GameStanding', (player, totalCards) => {
+                if (player.toLowerCase() === listenerAddress) {
+                    handleBatchGameStanding(Number(totalCards));
+                }
+            });
+
+            contract.on('SettlementRequested', (player, requestId) => {
+                if (player.toLowerCase() === listenerAddress) {
+                    handleBatchSettlementRequested(requestId);
+                }
+            });
+
+            contract.on('RoundSettled', (player, result, payout, playerScore, dealerScore) => {
+                if (player.toLowerCase() === listenerAddress) {
+                    handleBatchRoundSettled(result, payout, playerScore, dealerScore);
+                }
+            });
+
+            contract.on('SettlementFailed', (player, reason) => {
+                if (player.toLowerCase() === listenerAddress) {
+                    handleBatchSettlementFailed(reason);
+                }
+            });
+
+            contract.on('Deposit', (player, amount) => {
+                if (player.toLowerCase() === listenerAddress) {
+                    updateStatus(`💰 Deposit confirmed: ${formatUnits(amount, 18)} ETH`, 'success');
+                    checkBalance({ preserveTable: true });
+                }
+            });
+
+            contract.on('Withdrawal', (player, amount) => {
+                if (player.toLowerCase() === listenerAddress) {
+                    updateStatus(`💸 Withdrawal confirmed: ${formatUnits(amount, 18)} ETH`, 'info');
+                    checkBalance({ preserveTable: true });
+                }
+            });
+        }
+
+        function setupContractListeners(listenerAddress) {
+            if (!contract) return;
+            if (typeof contract.removeAllListeners === 'function') {
+                contract.removeAllListeners();
+            }
+            if (currentMode === 'legacy') {
+                setupLegacyListeners(listenerAddress);
+                return;
+            }
+            const config = getModeConfig();
+            if (config.experimental) {
+                updateStatus('Batch mode selected. Gameplay listeners will activate once the new flow ships.', 'info', true);
+                return;
+            }
+            if (currentMode === 'batch') {
+                setupBatchListeners(listenerAddress);
+            }
+        }
+
+        async function switchMode(nextMode) {
+            if (!CONTRACT_CONFIG[nextMode]) {
+                console.warn('[mode] Unsupported selection:', nextMode);
+                return;
+            }
+            if (currentMode === nextMode) {
+                return;
+            }
+
+            currentMode = nextMode;
+            resetGameStateForMode();
+            const config = getModeConfig();
+            contractAddress = config.address;
+            contractABI = config.abi;
+            contractAddressLower = contractAddress ? contractAddress.toLowerCase() : '';
+            experimentalModeActive = !!config.experimental;
+            auditContract = new Contract(contractAddress, contractABI, auditProvider);
+
+            if (contract && typeof contract.removeAllListeners === 'function') {
+                contract.removeAllListeners();
+            }
+
+            if (walletConnected && signer) {
+                contract = new Contract(contractAddress, contractABI, signer);
+                const listenerAddress = userAddress?.toLowerCase?.();
+                if (listenerAddress) {
+                    setupContractListeners(listenerAddress);
+                }
+                try {
+                    await updateGameDisplay();
+                } catch (error) {
+                    console.warn('[mode] Failed to refresh display after mode switch:', error);
+                }
+            } else {
+                resetGameStateForMode();
+            }
+
+            updateDepositButtonState();
+            updateBetWeiDisplay();
+            updateStartButtonState();
+            updateForceResetButtonState();
+            updateActionButtonsState();
+            const modeSelect = document.getElementById('game-mode');
+            if (modeSelect && modeSelect.value !== currentMode) {
+                modeSelect.value = currentMode;
+            }
+            announceModeSelection();
+        }
+
+        const originalFetch = window.fetch;
+        window.fetch = async (url, options) => {
+            if (typeof url === 'string' && url.includes('/v1/input-proof') && options && typeof options.body === 'string') {
+                try {
+                    const payload = JSON.parse(options.body);
+                    console.debug('[debug] input-proof payload keys', Object.keys(payload));
+                    console.debug('[debug] input-proof extraData', payload.extraData);
+                } catch (err) {
+                    console.warn('[debug] failed to inspect input-proof payload', err);
+                }
+            }
+            return originalFetch(url, options);
+        };
+
+        const UI_BOOT_STAMP = new Date().toISOString();
+        console.info(`[fhe-blackjack] frontend boot @ ${UI_BOOT_STAMP}`);
+        console.info('[fhe-blackjack] crossOriginIsolated =', window.crossOriginIsolated);
 
         function setTableStatus(message, tone = 'info') {
             const element = document.getElementById('table-status');
@@ -564,16 +1922,152 @@
             console.log("Status:", message);
         }
 
+        function updatePendingWarning(tone, message) {
+            const element = document.getElementById('pending-warning');
+            if (!element) return;
+
+            if (!tone || !message) {
+                element.style.display = 'none';
+                element.textContent = '';
+                element.dataset.tone = '';
+                return;
+            }
+
+            element.style.display = 'block';
+            element.textContent = message;
+            element.dataset.tone = tone;
+        }
+
+        function computePendingStatus() {
+            if (pendingRequestId === 0n) {
+                return null;
+            }
+            const since = pendingSinceTimestamp ?? Date.now();
+            const now = Date.now();
+            const elapsedMs = Math.max(0, now - since);
+            const elapsedSeconds = Math.floor(elapsedMs / 1000);
+
+            let tone = 'progress';
+            let message = `⏳ Awaiting gateway reveal (request ${pendingRequestId.toString()})`;
+            if (elapsedSeconds > 0) {
+                message += ` · ${elapsedSeconds}s`;
+            }
+
+            if (elapsedMs >= PENDING_ALERT_MS) {
+                tone = 'error';
+                message = `⚠️ Reveal pending ${elapsedSeconds}s (request ${pendingRequestId.toString()}). Consider Force Reset if it persists.`;
+            }
+
+            return { tone, message };
+        }
+
+        function refreshPendingTimer() {
+            const status = computePendingStatus();
+            if (!status) {
+                updatePendingWarning(null, null);
+                return;
+            }
+
+            updatePendingWarning(status.tone, status.message);
+            setTableStatus(status.message, status.tone);
+        }
+
+        function setPendingRequestId(nextValue) {
+            const normalized = typeof nextValue === 'bigint' ? nextValue : BigInt(nextValue || 0);
+            if (pendingRequestId === normalized) {
+                return;
+            }
+
+            pendingRequestId = normalized;
+            if (currentMode === 'batch') {
+                batchState.pendingId = normalized;
+            }
+
+            if (pendingTimerHandle) {
+                clearInterval(pendingTimerHandle);
+                pendingTimerHandle = null;
+            }
+
+            if (pendingRequestId !== 0n) {
+                pendingSinceTimestamp = Date.now();
+                refreshPendingTimer();
+                pendingTimerHandle = setInterval(refreshPendingTimer, 1000);
+            } else {
+                pendingSinceTimestamp = null;
+                updatePendingWarning(null, null);
+            }
+
+            updateActionButtonsState();
+        }
+
         function shortAddress(address) {
             return address ? `${address.slice(0, 6)}...${address.slice(-4)}` : 'Not Connected';
         }
 
+        function resetWalletState() {
+            provider = null;
+            signer = null;
+            contract = null;
+            userAddress = undefined;
+            document.getElementById('wallet-address').textContent = shortAddress(userAddress);
+            const checkBalanceBtn = document.getElementById('check-balance');
+            if (checkBalanceBtn) checkBalanceBtn.disabled = true;
+            updateDepositButtonState();
+            updateStartButtonState();
+            updateForceResetButtonState();
+            updateActionButtonsState();
+            resetGameStateForMode();
+        }
+
+        function setConnectWalletState(connected) {
+            walletConnected = connected;
+            const connectButton = document.getElementById('connect-wallet');
+            if (!connectButton) return;
+            if (connected) {
+                connectButton.textContent = '✅ Wallet Connected';
+                connectButton.classList.add('connected');
+            } else {
+                connectButton.textContent = '🔗 Connect Wallet';
+                connectButton.classList.remove('connected');
+            }
+        }
+
+        function getCardRank(value) {
+            if (!value) return 0;
+            const numeric = Number(value);
+            if (!Number.isFinite(numeric) || numeric <= 0) {
+                return 0;
+            }
+            return ((numeric - 1) % 13) + 1;
+        }
+
         function cardValueToString(value) {
-            if (value === 1) return 'A';
-            if (value === 11) return 'J';
-            if (value === 12) return 'Q';  
-            if (value === 13) return 'K';
-            return value.toString();
+            const rank = getCardRank(value);
+            if (rank === 1) return 'A';
+            if (rank === 11) return 'J';
+            if (rank === 12) return 'Q';  
+            if (rank === 13) return 'K';
+            if (rank === 0) return '?';
+            return rank.toString();
+        }
+
+        function cardSuitSymbol(value) {
+            if (!value) return '♠️';
+            const numeric = Number(value);
+            if (!Number.isFinite(numeric) || numeric <= 0) {
+                return '♠️';
+            }
+            const suitIndex = Math.floor((numeric - 1) / 13);
+            return SUITS[suitIndex] || '♠️';
+        }
+
+        function formatCardLabel(value) {
+            if (!value) {
+                return '??';
+            }
+            const rank = cardValueToString(value);
+            const suit = cardSuitSymbol(value);
+            return `${rank}${suit}`;
         }
 
         function getDepositWeiValue() {
@@ -627,6 +2121,18 @@
             const startButton = document.getElementById('start-game');
             const warning = document.getElementById('bet-warning');
             if (!startButton) return;
+            const defaultLabel = '🎲 Start Game';
+            const busyLabel = '⏳ Starting...';
+            if (startGameInFlight) {
+                startButton.disabled = true;
+                startButton.textContent = busyLabel;
+                if (warning) {
+                    warning.style.display = 'block';
+                    warning.textContent = 'Starting game...';
+                }
+                return;
+            }
+            startButton.textContent = defaultLabel;
             const betWei = getBetWeiValue();
 
             if (!contract) {
@@ -635,11 +2141,36 @@
                 return;
             }
 
-            if (currentGameActive) {
+            if (experimentalModeActive) {
                 startButton.disabled = true;
                 if (warning) {
                     warning.style.display = 'block';
-                    warning.textContent = 'Finish the current round or use Force Reset first.';
+                    warning.textContent = 'Batch mode preview: gameplay actions are temporarily disabled.';
+                }
+                return;
+            }
+
+            if (!relayerReady) {
+                startButton.disabled = true;
+                if (warning) {
+                    warning.style.display = 'block';
+                    if (relayerInitError) {
+                        const msg = relayerInitError?.message || relayerInitError;
+                        warning.textContent = `Relayer unavailable: ${msg}`;
+                    } else if (relayerInitializing) {
+                        warning.textContent = 'Initializing relayer...';
+                    } else {
+                        warning.textContent = 'Relayer not initialized. Connect your wallet to load it.';
+                    }
+                }
+                return;
+            }
+
+            if (currentGameActive || pendingRequestId !== 0n) {
+                startButton.disabled = true;
+                if (warning) {
+                    warning.style.display = 'block';
+                    warning.textContent = 'Finish the current round or wait for the pending reveal before starting a new game.';
                 }
                 return;
             }
@@ -680,19 +2211,81 @@
             const depositButton = document.getElementById('deposit');
             if (!depositButton) return;
             const depositWei = getDepositWeiValue();
-            depositButton.disabled = !contract || !depositWei;
+            depositButton.textContent = depositInFlight ? '⏳ Depositing...' : '💳 Deposit';
+            depositButton.disabled = !contract || !depositWei || depositInFlight;
         }
 
         function updateForceResetButtonState() {
             const resetButton = document.getElementById('force-reset');
             if (!resetButton) return;
-            resetButton.disabled = !contract || !currentGameActive;
+            resetButton.disabled = !contract || !currentGameActive || pendingRequestId !== 0n;
         }
 
         function updateGameControlsVisibility() {
             const controls = document.getElementById('game-controls');
             if (!controls) return;
-            controls.style.display = currentGameActive ? 'flex' : 'none';
+            controls.style.display = (!experimentalModeActive && currentGameActive) ? 'flex' : 'none';
+            updateActionButtonsState();
+        }
+
+        function updateActionButtonsState() {
+            const hitButton = document.getElementById('hit');
+            const standButton = document.getElementById('stand');
+            const settleButton = document.getElementById('settle');
+            if (settleButton) {
+                settleButton.style.display = currentMode === 'batch' ? 'inline-flex' : 'none';
+                settleButton.disabled = true;
+                const settleLabel = settleInFlight || pendingRequestId !== 0n
+                    ? '⏳ Settling...'
+                    : '🧾 Settle Round';
+                if (settleButton.textContent !== settleLabel) {
+                    settleButton.textContent = settleLabel;
+                }
+            }
+
+            if (experimentalModeActive) {
+                if (hitButton) hitButton.disabled = true;
+                if (standButton) standButton.disabled = true;
+                if (settleButton) settleButton.disabled = true;
+                return;
+            }
+
+            if (actionInFlight) {
+                if (hitButton) hitButton.disabled = true;
+                if (standButton) standButton.disabled = true;
+                if (settleButton) settleButton.disabled = true;
+                return;
+            }
+
+            if (currentMode === 'batch') {
+                const hitDisabled = !contract || !currentGameActive || pendingRequestId !== 0n || batchState.phase !== GAME_PHASE.Active;
+                if (hitButton) hitButton.disabled = hitDisabled;
+                if (standButton) standButton.disabled = hitDisabled;
+                if (settleButton) {
+                    const canSettle =
+                        !!contract &&
+                        currentGameActive &&
+                        batchState.phase === GAME_PHASE.AwaitingSettlement &&
+                        pendingRequestId === 0n &&
+                        !settleInFlight;
+                    settleButton.disabled = !canSettle;
+                }
+                return;
+            }
+
+            const disabled = !contract || !currentGameActive || pendingRequestId !== 0n;
+            if (hitButton) hitButton.disabled = disabled;
+            if (standButton) standButton.disabled = disabled;
+            if (settleButton) {
+                settleButton.disabled = disabled;
+            }
+        }
+
+        function isRevealPendingError(error) {
+            if (!error) return false;
+            const selectors = ['0xd0d25976']; // keccak256("RevealPending(uint256)")
+            const dataCandidates = [error.data, error.error?.data, error?.info?.error?.data, error?.error?.error?.data];
+            return dataCandidates.some((data) => typeof data === 'string' && selectors.some((sel) => data.startsWith(sel)));
         }
 
         function clearAnimationTimers() {
@@ -709,11 +2302,9 @@
         const SUITS = ['♠️', '♥️', '♦️', '♣️'];
 
         function getSuit(handKey, index, cardValue) {
-            if (!suitCache[handKey][index]) {
-                const seed = (cardValue * 31 + index * 17) % SUITS.length;
-                suitCache[handKey][index] = SUITS[seed];
-            }
-            return suitCache[handKey][index];
+            const symbol = cardSuitSymbol(cardValue);
+            suitCache[handKey][index] = symbol;
+            return symbol;
         }
 
         function addCardToDisplay(container, handKey, index, cardValue, hidden) {
@@ -746,21 +2337,25 @@
             animationTimers.push(timer);
         }
 
-        function renderHand({ containerId, handKey, cards, hideHole, score }) {
+        function renderHand({ containerId, handKey, cards, hiddenIndex = null, score }) {
             const container = document.getElementById(containerId);
             const scoreElement = document.getElementById(containerId.replace('cards', 'score'));
             if (!container || !scoreElement) return;
 
             container.innerHTML = '';
             cards.forEach((value, idx) => {
-                const hidden = hideHole && idx === 0;
+                const hidden = hiddenIndex !== null && idx === hiddenIndex;
                 addCardToDisplay(container, handKey, idx, value, hidden);
             });
 
-            if (hideHole) {
+            if (hiddenIndex !== null) {
                 scoreElement.textContent = 'Score: ??';
             } else if (cards.length) {
-                scoreElement.textContent = `Score: ${score}`;
+                if (score === null || score === undefined) {
+                    scoreElement.textContent = 'Score: ??';
+                } else {
+                    scoreElement.textContent = `Score: ${score}`;
+                }
             } else {
                 scoreElement.textContent = 'Score: -';
             }
@@ -775,6 +2370,250 @@
             document.getElementById('dealer-score').textContent = 'Score: -';
         }
 
+        function calculateHandValue(cards) {
+            let total = 0;
+            let aces = 0;
+            cards.forEach((card) => {
+                if (!card) return;
+                const rank = getCardRank(card);
+                if (rank === 1) {
+                    aces += 1;
+                    total += 11;
+                } else if (rank >= 10) {
+                    total += 10;
+                } else {
+                    total += rank;
+                }
+            });
+            while (total > 21 && aces > 0) {
+                total -= 10;
+                aces -= 1;
+            }
+            return total;
+        }
+
+        function describeRequestId(id) {
+            return id === 0n ? '-' : id.toString();
+        }
+
+        function valueForHandle(handle) {
+            const normalized = normalizeHandle(handle);
+            if (!normalized || normalized === ZERO_HANDLE) {
+                return 0;
+            }
+            const cached = batchState.decrypted.get(normalized);
+            if (typeof cached === 'number' && Number.isFinite(cached)) {
+                return cached;
+            }
+            return 0;
+        }
+
+        function extractPlayerCards(limit) {
+            if (!limit || limit <= 0) {
+                return [];
+            }
+            return batchState.playerHandles
+                .slice(0, limit)
+                .map((handle) => valueForHandle(handle))
+                .filter((value) => value && Number.isFinite(value));
+        }
+
+        function computeDealerRevealSequence(rawCards, targetScore) {
+            const sequence = [];
+            let total = 0;
+            let aces = 0;
+
+            const cards = rawCards.filter((value) => value && Number.isFinite(value));
+            for (let i = 0; i < cards.length; i++) {
+                const card = cards[i];
+                const rank = getCardRank(card);
+                sequence.push(card);
+
+                if (rank === 1) {
+                    aces += 1;
+                    total += 11;
+                } else if (rank >= 10) {
+                    total += 10;
+                } else {
+                    total += rank;
+                }
+
+                while (total > 21 && aces > 0) {
+                    total -= 10;
+                    aces -= 1;
+                }
+
+                const reachedStand = total >= 17 || sequence.length >= cards.length;
+                if (targetScore) {
+                    if (total === targetScore && reachedStand) {
+                        break;
+                    }
+                } else if (reachedStand && sequence.length >= 2) {
+                    break;
+                }
+            }
+
+            return {
+                cards: sequence,
+                score: total
+            };
+        }
+
+        function normalizePendingValue(value) {
+            if (typeof value === 'bigint') {
+                return value;
+            }
+            if (typeof value === 'number') {
+                return BigInt(value);
+            }
+            if (typeof value === 'string' && value.length) {
+                try {
+                    return BigInt(value);
+                } catch (error) {
+                    return 0n;
+                }
+            }
+            if (value && typeof value.toString === 'function') {
+                try {
+                    return BigInt(value.toString());
+                } catch (error) {
+                    return 0n;
+                }
+            }
+            return 0n;
+        }
+
+        async function fetchPendingRequestIdFromChain() {
+            if (!contract) {
+                return pendingRequestId;
+            }
+
+            try {
+                const state = await contract.getGameState();
+                const raw = currentMode === 'batch' ? state?.[3] : state?.[6];
+                return normalizePendingValue(raw);
+            } catch (error) {
+                console.warn('[pending] Failed to refresh pending request from chain', error);
+                return pendingRequestId;
+            }
+        }
+
+        async function refreshPendingStateFromChain() {
+            const latest = await fetchPendingRequestIdFromChain();
+            if (latest !== pendingRequestId) {
+                setPendingRequestId(latest);
+            }
+            return latest;
+        }
+
+        function shortHash(hash) {
+            if (!hash) return '--';
+            if (hash.length <= 14) {
+                return hash;
+            }
+            return `${hash.slice(0, 8)}...${hash.slice(-6)}`;
+        }
+
+        function recordLatestTransaction(hash, label = 'Transaction') {
+            if (!hash) {
+                return;
+            }
+
+            latestTxHash = hash;
+            latestTxLabel = label;
+
+            if (recentTxLabelEl) {
+                recentTxLabelEl.textContent = label;
+            }
+            if (recentTxHashEl) {
+                recentTxHashEl.textContent = shortHash(hash);
+                recentTxHashEl.title = hash;
+                recentTxHashEl.dataset.hash = hash;
+            }
+            if (useLastTxBtn) {
+                useLastTxBtn.disabled = false;
+            }
+
+            if (auditElements.tx) {
+                auditElements.tx.value = hash;
+            }
+
+            if (!auditInFlight && auditElements.status) {
+                const normalizedLabel = label ? label.toLowerCase() : 'transaction';
+                setAuditStatus(`Loaded ${normalizedLabel} hash ${shortHash(hash)} into the audit form.`, 'info');
+            }
+        }
+
+        function updateBetVerificationStatus(status, message) {
+            const element = document.getElementById('bet-verification-status');
+            if (!element) return;
+
+            if (!status || !message) {
+                element.style.display = 'none';
+                element.textContent = '';
+                element.dataset.status = '';
+                return;
+            }
+
+            element.style.display = 'block';
+            element.textContent = message;
+            element.dataset.status = status;
+        }
+
+        async function loadRelayerModule() {
+            try {
+                // Force local module to avoid CDN issues with WASM loading
+                console.log('[relayer] Loading local SDK module...');
+                return await import('./relayer-sdk-js.js');
+            } catch (error) {
+                console.error('[relayer] FATAL: Could not load local SDK module.', error);
+                throw error; // Re-throw to be caught by initializeRelayer
+            }
+        }
+
+        async function initializeRelayer() {
+            if (relayerReady && relayerClient) {
+                return relayerClient;
+            }
+
+            if (relayerInitPromise) {
+                return relayerInitPromise;
+            }
+
+            relayerInitializing = true;
+            relayerInitError = null;
+            updateStartButtonState();
+
+            relayerInitPromise = (async () => {
+                try {
+                    const module = await loadRelayerModule();
+                    console.log('[relayer] initSDK start');
+                    await module.initSDK();
+                    console.log('[relayer] initSDK ok');
+                    relayerClient = await module.createInstance({
+                        ...module.SepoliaConfig,
+                        network: window.ethereum
+                    });
+                    relayerReady = true;
+                    console.log('[relayer] SDK initialized');
+                    return relayerClient;
+                } catch (error) {
+                    relayerInitError = error;
+                    console.error('[relayer] initialization failed', error);
+                    throw error;
+                } finally {
+                    relayerInitializing = false;
+                    relayerInitPromise = null;
+                    updateStartButtonState();
+                }
+            })();
+
+            return relayerInitPromise;
+        }
+
+        // Note: Zama relayer doesn't have a public health endpoint
+        // We'll rely on SDK initialization to detect relayer issues
+
         async function connectWallet() {
             try {
                 if (typeof window.ethereum === 'undefined') {
@@ -788,12 +2627,13 @@
                 await provider.send('eth_requestAccounts', []);
                 signer = await provider.getSigner();
                 userAddress = await signer.getAddress();
-                
+
                 document.getElementById('wallet-address').textContent = shortAddress(userAddress);
                 contract = new Contract(contractAddress, contractABI, signer);
 
-                contract.removeAllListeners?.('GameStarted');
-                contract.removeAllListeners?.('GameEnded');
+                if (typeof contract.removeAllListeners === 'function') {
+                    contract.removeAllListeners();
+                }
 
                 const checkBalanceBtn = document.getElementById('check-balance');
                 if (checkBalanceBtn) {
@@ -805,28 +2645,57 @@
                 updateBetWeiDisplay();
                 updateStartButtonState();
                 updateForceResetButtonState();
+                updateActionButtonsState();
+                setConnectWalletState(true);
+
+                if (auditElements.player) {
+                    auditElements.player.value = userAddress;
+                }
+                if (!auditInFlight && auditElements.status) {
+                    setAuditStatus('Wallet connected. Player address pre-filled for fairness audit.', 'info');
+                }
 
                 updateStatus('✅ Wallet connected! Check your balance and deposit to start playing.', 'success');
+                try {
+                    await initializeRelayer();
+                    console.log('[relayer] SDK initialized successfully');
+                } catch (relayerError) {
+                    const message = relayerError?.message || 'Relayer initialization failed.';
+                    updateStatus(`⚠️ Relayer unavailable: ${message}`, 'error', true);
+                }
                 await checkBalance();
                 await updateGameDisplay();
-                
-                // Set up event listeners
-                contract.on("GameStarted", (player, betAmount) => {
-                    if (player.toLowerCase() === userAddress.toLowerCase()) {
-                        handleGameStarted();
-                    }
-                });
-                
-                contract.on("GameEnded", (player, result) => {
-                    if (player.toLowerCase() === userAddress.toLowerCase()) {
-                        handleGameEnded(result);
-                    }
-                });
-                
+
+                const listenerAddress = userAddress.toLowerCase();
+                setupContractListeners(listenerAddress);
             } catch (error) {
                 console.error('Error connecting wallet:', error);
                 updateStatus('Failed to connect wallet: ' + error.message, 'error');
+                setConnectWalletState(false);
+                resetWalletState();
             }
+        }
+
+        function handleInvalidBetReveal(claimedAmount, revealedAmount) {
+            const claimed = formatUnits(claimedAmount, 18);
+            const revealed = formatUnits(revealedAmount, 18);
+            const message = `Bet verification failed on-chain. Claimed ${claimed} ETH but relayer revealed ${revealed} ETH. Your bet has been refunded.`;
+            
+            updateBetVerificationStatus('error', message);
+            updateStatus(message, 'error');
+
+            currentGameActive = false;
+            setPendingRequestId(0n);
+            currentBetWei = 0n;
+            
+            updateGameControlsVisibility();
+            updateForceResetButtonState();
+            updateStartButtonState();
+            updateActionButtonsState();
+
+            setTimeout(() => {
+                checkBalance({ preserveTable: true });
+            }, 1200);
         }
 
         async function checkBalance(options = {}) {
@@ -848,20 +2717,15 @@
                 updateDepositButtonState();
                 updateBetWeiDisplay();
                 updateStartButtonState();
+                updateActionButtonsState();
 
                 const ethValue = formatUnits(balance, 18);
                 if (!preserveTable) {
                     updateStatus(`💰 Balance: ${balance.toString()} Wei (${ethValue} ETH)`, 'info');
-                } else {
-                    console.log(`Balance update: ${balance.toString()} Wei (${ethValue} ETH)`);
+                } else if (lastRoundMessage) {
+                    updateStatus(lastRoundMessage, lastRoundTone, false);
                 }
-                if (!currentGameActive) {
-                    balanceBeforeRound = balance;
-                }
-                if (preserveTable && lastRoundMessage) {
-                    updateStatus(lastRoundMessage, lastRoundTone);
-            }
-        } catch (error) {
+            } catch (error) {
                 console.error('Error checking balance:', error);
                 updateStatus('Failed to check balance: ' + error.message, 'error');
             }
@@ -885,8 +2749,11 @@
             }
 
             try {
+                depositInFlight = true;
+                updateDepositButtonState();
                 updateStatus(`💳 Processing deposit of ${raw} ETH...`, 'progress');
                 const tx = await contract.deposit({ value: depositWei });
+                recordLatestTransaction(tx.hash, 'Deposit');
                 await tx.wait();
 
                 updateStatus('✅ Deposit successful!', 'success');
@@ -896,6 +2763,9 @@
             } catch (error) {
                 console.error('Error depositing:', error);
                 updateStatus('Deposit failed: ' + error.message, 'error');
+            } finally {
+                depositInFlight = false;
+                updateDepositButtonState();
             }
         }
 
@@ -905,19 +2775,24 @@
                 return;
             }
 
+            if (experimentalModeActive) {
+                updateStatus('Batch mode preview: force reset is disabled until gameplay integration is complete.', 'info');
+                return;
+            }
+
             try {
+                updateBetVerificationStatus(null, null);
                 updateStatus('♻️ Force resetting current round...', 'progress');
                 const tx = await contract.forceReset();
+                recordLatestTransaction(tx.hash, 'Force Reset');
                 await tx.wait();
-
-                await updateGameDisplay();
+                if (currentMode === 'batch') {
+                    handleBatchForceReset();
+                } else {
+                    handleForceResetEvent();
+                }
                 updateStatus('♻️ Round reset. You can start a new game.', 'success');
                 await checkBalance({ preserveTable: true });
-                updateForceResetButtonState();
-                updateStartButtonState();
-                currentBetWei = 0n;
-                lastRoundMessage = '♻️ Round reset. You can start a new game.';
-                lastRoundTone = 'success';
             } catch (error) {
                 console.error('Error force resetting:', error);
                 const message = (error?.reason || error?.message || 'Force reset failed').toString();
@@ -929,8 +2804,147 @@
             }
         }
 
+        async function retryRelayerEncryption(betWei, maxRetries) {
+            for (let attempt = 1; attempt <= maxRetries; attempt++) {
+                try {
+                    const status = attempt === 1 ? 
+                        'Encrypting your bet with the relayer...' : 
+                        `Retry ${attempt}/${maxRetries}: Relayer connection issue, retrying...`;
+                    updateBetVerificationStatus('encrypting', status);
+                    
+                    const buffer = relayerClient.createEncryptedInput(contractAddress, userAddress);
+                    buffer.add128(betWei);
+                    const encrypted = await buffer.encrypt();
+                    
+                    console.log(`[relayer] Encryption successful on attempt ${attempt}`);
+                    return encrypted;
+                } catch (error) {
+                    console.error(`[relayer] Encryption attempt ${attempt} failed:`, error);
+                    
+                    if (attempt === maxRetries) {
+                        // Final attempt failed - provide specific guidance based on current issues
+                        if (error.message && error.message.includes('500')) {
+                            const currentDate = new Date();
+                            const upgradeWindow = currentDate >= new Date('2025-10-06') && currentDate <= new Date('2025-10-10');
+                            
+                            if (upgradeWindow) {
+                                throw new Error('RELAYER_UPGRADE: Zama is upgrading FHEVM v0.9 (Oct 6-10, 2025). Relayer may be unstable. Try test mode or wait until Oct 10.');
+                            } else {
+                                throw new Error('RELAYER_UNAVAILABLE: Zama relayer service returned 500 error. Check https://zamablockchain.grafana.net/public-dashboards/4027c482ad1e44ddb1336ec04cc5a1db for status.');
+                            }
+                        }
+                        throw new Error('RELAYER_FAILED: ' + error.message);
+                    }
+                    
+                    // Wait before retry with exponential backoff
+                    const delay = Math.min(1000 * Math.pow(2, attempt - 1), 5000);
+                    await new Promise(resolve => setTimeout(resolve, delay));
+                }
+            }
+        }
+
+        function addFallbackSuggestion() {
+            // Add a temporary test mode button to the UI
+            const existingFallback = document.getElementById('fallback-suggestion');
+            if (existingFallback) return; // Already shown
+            
+            const container = document.querySelector('.game-controls') || document.querySelector('.action-buttons');
+            if (!container) return;
+            
+            const fallbackDiv = document.createElement('div');
+            fallbackDiv.id = 'fallback-suggestion';
+            fallbackDiv.style.cssText = `
+                margin: 15px 0;
+                padding: 15px;
+                background: rgba(255, 193, 7, 0.1);
+                border: 2px solid rgba(255, 193, 7, 0.3);
+                border-radius: 10px;
+                text-align: center;
+            `;
+            
+            fallbackDiv.innerHTML = `
+                <p style="margin: 0 0 10px 0; color: #ffc107;">⚠️ FHE relayer is temporarily unavailable</p>
+                <button id="switch-to-test" style="
+                    background: linear-gradient(135deg, #28a745, #20c997);
+                    color: white;
+                    border: none;
+                    padding: 10px 20px;
+                    border-radius: 8px;
+                    cursor: pointer;
+                    font-weight: 600;
+                    margin-right: 10px;
+                ">Try Test Mode (No Encryption)</button>
+                <button id="dismiss-fallback" style="
+                    background: #6c757d;
+                    color: white;
+                    border: none;
+                    padding: 10px 20px;
+                    border-radius: 8px;
+                    cursor: pointer;
+                ">Dismiss</button>
+            `;
+            
+            container.appendChild(fallbackDiv);
+            
+            // Add event listeners
+            document.getElementById('switch-to-test').onclick = async () => {
+                updateStatus('🔄 Switching to test mode (FHEBlackjackTest)...', 'progress');
+                await switchToTestContract();
+                fallbackDiv.remove();
+            };
+            
+            document.getElementById('dismiss-fallback').onclick = () => {
+                fallbackDiv.remove();
+            };
+        }
+
+        async function switchToTestContract() {
+            try {
+                // Deploy or use existing test contract
+                updateStatus('🛠️ Deploying test contract (this may take a moment)...', 'progress');
+                
+                // For now, suggest deploying via command line
+                const deployCommand = 'npm run deploy-test';
+                updateStatus(`⚠️ Manual step needed: Run "${deployCommand}" in terminal to deploy test contract, then refresh the page.`, 'info');
+                
+                // Alternative: Show instructions
+                const instructions = `
+                <div style="background: rgba(40, 167, 69, 0.1); border: 2px solid rgba(40, 167, 69, 0.3); border-radius: 10px; padding: 20px; margin: 20px 0;">
+                    <h3 style="color: #28a745; margin-top: 0;">📝 Switch to Test Mode</h3>
+                    <p>To use the non-encrypted test version while relayer is down:</p>
+                    <ol style="text-align: left; margin: 10px 0;">
+                        <li>Open terminal in project directory</li>
+                        <li>Run: <code style="background: rgba(0,0,0,0.2); padding: 2px 6px; border-radius: 4px;">npm run deploy-test</code></li>
+                        <li>Refresh this page</li>
+                    </ol>
+                    <p style="color: #ffc107; margin-bottom: 0;">⚠️ Test mode uses regular smart contract without FHE encryption</p>
+                </div>
+                `;
+                
+                const existingInstructions = document.getElementById('test-mode-instructions');
+                if (!existingInstructions) {
+                    const container = document.querySelector('.container');
+                    if (container) {
+                        const instructionsDiv = document.createElement('div');
+                        instructionsDiv.id = 'test-mode-instructions';
+                        instructionsDiv.innerHTML = instructions;
+                        container.appendChild(instructionsDiv);
+                    }
+                }
+                
+            } catch (error) {
+                console.error('Error switching to test contract:', error);
+                updateStatus('Failed to switch to test mode: ' + error.message, 'error');
+            }
+        }
+
         async function startGame() {
             if (!contract) return;
+
+            if (experimentalModeActive) {
+                updateStatus('Batch mode preview: start game is disabled in this build.', 'info');
+                return;
+            }
 
             const betWei = getBetWeiValue();
             if (!betWei) {
@@ -939,58 +2953,189 @@
             }
 
             try {
+                startGameInFlight = true;
+                updateStartButtonState();
+                if (!relayerReady || !relayerClient) {
+                    await initializeRelayer();
+                }
+
+                if (!relayerReady || !relayerClient) {
+                    throw new Error('Relayer not ready. Cannot submit encrypted bet.');
+                }
+
+                // Retry mechanism for relayer encryption
+                const encrypted = await retryRelayerEncryption(betWei, 3);
+                if (!encrypted.handles || encrypted.handles.length === 0) {
+                    throw new Error('Relayer did not return ciphertext handles.');
+                }
+
+                const betHandleHex = hexlify(encrypted.handles[0]);
+                const betProofHex = hexlify(encrypted.inputProof);
+
                 const betEth = formatUnits(betWei, 18);
-                balanceBeforeRound = lastKnownBalance;
                 currentBetWei = betWei;
                 lastRoundMessage = null;
-                updateStatus(`🎲 Starting game with ${betWei.toString()} Wei (${betEth} ETH)...`, 'progress');
+                updateStatus(`🎲 Encrypting bet (${betEth} ETH) and starting the game...`, 'progress');
+                updateBetVerificationStatus('submitting', 'Submitting transaction to the blockchain...');
 
-                const tx = await contract.startGameTest(betWei);
+                const tx = await contract.startGame(betWei, betHandleHex, betProofHex);
+                recordLatestTransaction(tx.hash, 'Start Game');
                 await tx.wait();
 
+                updateStatus('🎲 Game submitted. Waiting for gateway reveal...', 'progress');
+                updateBetVerificationStatus('verifying', 'Transaction confirmed. Awaiting on-chain bet verification...');
                 await updateGameDisplay();
-                updateStatus('🎉 Game started! Dealing cards...', 'progress');
             } catch (error) {
                 console.error('Error starting game:', error);
                 await updateGameDisplay();
                 currentBetWei = 0n;
+                const baseMessage = 'Failed to start game';
+                let errorMessage = baseMessage;
+                
                 if (error?.reason && error.reason.includes('Game already in progress')) {
-                    updateStatus('Game already in progress. Finish the round or use Force Reset.', 'error');
-                } else {
-                    updateStatus('Failed to start game: ' + error.message, 'error');
+                    errorMessage = 'Game already in progress. Finish the round or use Force Reset.';
+                } else if (error?.message && error.message.includes('RELAYER_UPGRADE')) {
+                    errorMessage = '🔄 Zama is upgrading FHEVM v0.9 (Oct 6-10). Use "Test Mode" during the upgrade window.';
+                    updateBetVerificationStatus('error', 'Relayer upgrading - Test mode recommended');
+                    addFallbackSuggestion();
+                    return;
+                } else if (error?.message && error.message.includes('RELAYER_UNAVAILABLE')) {
+                    errorMessage = '⚠️ Relayer service issue. Check Zama status dashboard or try test mode.';
+                    updateBetVerificationStatus('error', 'Relayer unavailable - Check status or use test mode');
+                    addFallbackSuggestion();
+                    return;
+                } else if (error?.message) {
+                    errorMessage = `${baseMessage}: ${error.message}`;
                 }
+                updateStatus(errorMessage, 'error');
+                updateBetVerificationStatus('error', errorMessage);
+            } finally {
+                startGameInFlight = false;
+                updateStartButtonState();
             }
         }
 
         async function hit() {
             if (!contract) return;
-            
+            if (experimentalModeActive) {
+                updateStatus('Batch mode preview: hit action disabled until gameplay wiring lands.', 'info');
+                return;
+            }
+            if (actionInFlight) {
+                updateStatus('Another action is in progress. Please wait a moment.', 'info', true);
+                return;
+            }
+            if (pendingRequestId !== 0n) {
+                updateStatus(`Await the current reveal (request ${describeRequestId(pendingRequestId)}) before hitting again.`, 'info');
+                return;
+            }
+
+            const latestPending = await refreshPendingStateFromChain();
+            if (latestPending !== 0n) {
+                updateStatus(`Await the current reveal (request ${describeRequestId(latestPending)}) before hitting again.`, 'info');
+                return;
+            }
+
             try {
-                updateStatus('🃏 Hitting... waiting for transaction', 'progress');
+                actionInFlight = true;
+                updateActionButtonsState();
+                updateStatus('🃏 Requesting hit...', 'progress');
                 const tx = await contract.hit();
+                recordLatestTransaction(tx.hash, 'Hit');
                 await tx.wait();
-                
+
+                updateStatus('🃏 Hit submitted. Waiting for new card...', 'progress');
                 await updateGameDisplay();
-                updateStatus('🎯 Card dealt!', 'success');
             } catch (error) {
                 console.error('Error hitting:', error);
                 updateStatus('Hit failed: ' + error.message, 'error');
+                await refreshPendingStateFromChain();
+            } finally {
+                actionInFlight = false;
+                updateActionButtonsState();
             }
         }
 
         async function stand() {
             if (!contract) return;
-            
+            if (experimentalModeActive) {
+                updateStatus('Batch mode preview: stand action disabled until batch flow is finished.', 'info');
+                return;
+            }
+            if (actionInFlight) {
+                updateStatus('Another action is in progress. Please wait a moment.', 'info', true);
+                return;
+            }
+            if (pendingRequestId !== 0n) {
+                updateStatus(`Await the current reveal (request ${describeRequestId(pendingRequestId)}) before standing.`, 'info');
+                return;
+            }
+
+            const latestPending = await refreshPendingStateFromChain();
+            if (latestPending !== 0n) {
+                updateStatus(`Await the current reveal (request ${describeRequestId(latestPending)}) before standing.`, 'info');
+                return;
+            }
+
             try {
-                updateStatus('✋ Standing... Dealer finishing hand', 'progress');
+                actionInFlight = true;
+                updateActionButtonsState();
+                updateStatus('✋ Standing... dealer turn in progress', 'progress');
                 const tx = await contract.stand();
+                recordLatestTransaction(tx.hash, 'Stand');
                 await tx.wait();
-                
+
+                updateStatus('✋ Stand submitted. Waiting for dealer reveals...', 'progress');
                 await updateGameDisplay();
-                updateStatus('🎲 Game finished!', 'success');
             } catch (error) {
                 console.error('Error standing:', error);
+                if (isRevealPendingError(error)) {
+                    updateStatus('A reveal is still pending. Wait for the current request to finish before standing.', 'info');
+                    await refreshPendingStateFromChain();
+                    return;
+                }
                 updateStatus('Stand failed: ' + error.message, 'error');
+                await refreshPendingStateFromChain();
+            } finally {
+                actionInFlight = false;
+                updateActionButtonsState();
+            }
+        }
+
+        async function settleRound() {
+            if (!contract) return;
+            if (currentMode !== 'batch') {
+                updateStatus('Settlement is only available in batch mode.', 'info');
+                return;
+            }
+            if (experimentalModeActive) {
+                updateStatus('Batch mode preview: settlement flow will arrive in a future update.', 'info');
+                return;
+            }
+            if (actionInFlight) {
+                updateStatus('Another action is in progress. Please wait a moment.', 'info', true);
+                return;
+            }
+
+            try {
+                actionInFlight = true;
+                settleInFlight = true;
+                updateActionButtonsState();
+                updateStatus('🧾 Requesting settlement...', 'progress');
+                const tx = await contract.settleRound();
+                recordLatestTransaction(tx.hash, 'Settle Round');
+                await tx.wait();
+                updateStatus('🧾 Settlement requested. Await Gateway reveal for results.', 'progress');
+            } catch (error) {
+                console.error('Error settling round:', error);
+                const message = (error?.reason || error?.message || 'Settle failed').toString();
+                updateStatus('Settle failed: ' + message, 'error');
+                await refreshPendingStateFromChain();
+                settleInFlight = false;
+                updateActionButtonsState();
+            } finally {
+                actionInFlight = false;
+                updateActionButtonsState();
             }
         }
 
@@ -999,153 +3144,906 @@
 
             try {
                 clearAnimationTimers();
+                if (currentMode === 'batch') {
+                    await updateGameDisplayBatch();
+                    return;
+                }
 
-                const [playerCardsRaw, playerCountRaw, playerScoreRaw] = await contract.getPlayerCards();
-                const [dealerCardsRaw, dealerCountRaw, dealerScoreRaw] = await contract.getDealerCards();
-                const [isActiveRaw, stateRaw] = await contract.getGameState();
+                const state = await contract.getGameState();
+                const isActive = Boolean(state[0]);
+                const roundState = Number(state[1]);
+                const playerScore = Number(state[2]);
+                const dealerUpCard = Number(state[3]);
+                const playerCardCount = Number(state[4]);
+                const dealerCardCount = Number(state[5]);
+                const pendingId = BigInt(state[6]);
 
-                const playerCount = Number(playerCountRaw);
-                const dealerCount = Number(dealerCountRaw);
-                const playerScore = Number(playerScoreRaw);
-                const dealerScore = Number(dealerScoreRaw);
-                const playerCards = Array.from({ length: playerCount }, (_, i) => Number(playerCardsRaw[i]));
-                const dealerCards = Array.from({ length: dealerCount }, (_, i) => Number(dealerCardsRaw[i]));
-
-                lastPlayerCardCount = playerCount;
-                lastPlayerScore = playerScore;
-
-                const isActive = Boolean(isActiveRaw);
-                const state = Number(stateRaw);
                 currentGameActive = isActive;
-                currentGameState = state;
+                currentGameState = roundState;
+                setPendingRequestId(isActive ? pendingId : 0n);
+                lastPlayerKnownScore = playerScore;
+
                 updateGameControlsVisibility();
                 updateForceResetButtonState();
                 updateStartButtonState();
+                updateActionButtonsState();
 
-                const hideDealerHole = isActive && state === 1 && dealerCards.length > 0;
+                const playerCardsRaw = await contract.getPlayerCards();
+                const dealerCardsRaw = await contract.getDealerVisibleCards();
+                const playerCards = Array.from(playerCardsRaw, (value) => Number(value));
+                const dealerCards = Array.from(dealerCardsRaw, (value) => Number(value));
 
                 renderHand({
                     containerId: 'player-cards',
                     handKey: 'player',
                     cards: playerCards,
-                    hideHole: false,
-                    score: playerScore
+                    hiddenIndex: null,
+                    score: lastPlayerKnownScore
                 });
+
+                const hideDealerHole = dealerCards.length < dealerCardCount;
+                const dealerScoreDisplay = hideDealerHole
+                    ? null
+                    : (lastDealerKnownScore !== null ? lastDealerKnownScore : calculateHandValue(dealerCards));
 
                 renderHand({
                     containerId: 'dealer-cards',
                     handKey: 'dealer',
                     cards: dealerCards,
-                    hideHole: hideDealerHole,
-                    score: dealerScore
+                    hiddenIndex: hideDealerHole ? 1 : null,
+                    score: dealerScoreDisplay
                 });
 
-                if (hideDealerHole) {
+                const pendingStatus = computePendingStatus();
+                if (pendingStatus) {
+                    setTableStatus(pendingStatus.message, pendingStatus.tone);
+                } else if (hideDealerHole) {
                     setTableStatus('Dealer holds a hidden card...', 'progress');
+                } else if (!isActive && lastRoundMessage) {
+                    setTableStatus(lastRoundMessage, lastRoundTone);
+                } else if (!isActive) {
+                    setTableStatus('Waiting for a new game.', 'info');
+                } else if (dealerCards.length) {
+                    setTableStatus('Hands updated.', 'info');
                 } else {
-                    let tone = 'info';
-                    let message = dealerCards.length ? 'Hands updated.' : 'Waiting for cards...';
-
-                    if (!isActive) {
-                        switch (state) {
-                            case 2:
-                                tone = 'success';
-                                message = '🎉 You win this round!';
-                                break;
-                            case 3:
-                                tone = 'error';
-                                message = 'Dealer wins this round.';
-                                break;
-                            case 4:
-                                message = 'Round ended in a push.';
-                                break;
-                            default:
-                                message = 'Waiting for a new game.';
-                        }
-                    }
-
-                    setTableStatus(message, tone);
+                    setTableStatus('Waiting for cards...', 'info');
                 }
             } catch (error) {
                 console.error('Error updating game display:', error);
             }
         }
 
-        async function handleGameStarted() {
-            currentGameActive = true;
-            updateGameControlsVisibility();
-            updateForceResetButtonState();
-            document.getElementById('start-game').disabled = true;
-            clearAnimationTimers();
-            clearSuitCache();
-            lastRoundMessage = null;
-            clearCards();
-            setTableStatus('Cards incoming...', 'progress');
-            
-            // Wait a moment then update display
-            setTimeout(async () => {
-                await updateGameDisplay();
-            }, 500);
+        async function updateGameDisplayBatch() {
+            if (!contract) return;
+
+            if (experimentalModeActive) {
+                clearCards();
+                updateGameControlsVisibility();
+                setTableStatus('Batch mode preview – gameplay UI will light up once the new flow is ready.', 'info');
+                return;
+            }
+
+            try {
+                const state = await contract.getGameState();
+                const phase = Number(state[0]);
+                const playerCardCount = Number(state[1]);
+                const nextPlayerSlot = Number(state[2]);
+                const pendingId = BigInt(state[3]);
+                const settleAvailableAt = Number(state[5]);
+
+                batchState.phase = phase;
+                batchState.nextSlot = nextPlayerSlot;
+                batchState.pendingId = pendingId;
+                batchState.settleAvailableAt = settleAvailableAt;
+
+                if (playerCardCount > 0) {
+                    batchState.lastPlayerCardCount = playerCardCount;
+                }
+                batchState.playerCardCount = playerCardCount;
+
+                const isActive = phase === GAME_PHASE.Active || phase === GAME_PHASE.AwaitingSettlement || phase === GAME_PHASE.Settling;
+                currentGameActive = isActive;
+                currentGameState = phase;
+                setPendingRequestId(isActive ? pendingId : 0n);
+
+                if (!isActive && playerCardCount === 0 && batchState.pendingId === 0n) {
+                    if (lastRoundMessage) {
+                        settleInFlight = false;
+                        let playerCardsFinal = extractPlayerCards(batchState.lastPlayerCardCount || batchState.playerHandles.length);
+                        if (!playerCardsFinal.length && batchState.cachedPlayerCards.length) {
+                            playerCardsFinal = batchState.cachedPlayerCards.slice();
+                        }
+
+                        const dealerRawFinal = (batchState.dealerHandles || []).map((handle) => valueForHandle(handle));
+                        let dealerRevealFinal = computeDealerRevealSequence(dealerRawFinal, lastDealerKnownScore);
+                        if ((!dealerRevealFinal.cards || dealerRevealFinal.cards.length === 0) && batchState.cachedDealerCards.length) {
+                            dealerRevealFinal = {
+                                cards: batchState.cachedDealerCards.slice(),
+                                score: calculateHandValue(batchState.cachedDealerCards)
+                            };
+                        }
+
+                        renderHand({
+                            containerId: 'player-cards',
+                            handKey: 'player',
+                            cards: playerCardsFinal,
+                            hiddenIndex: null,
+                            score: calculateHandValue(playerCardsFinal)
+                        });
+
+                        renderHand({
+                            containerId: 'dealer-cards',
+                            handKey: 'dealer',
+                            cards: dealerRevealFinal.cards,
+                            hiddenIndex: null,
+                            score: dealerRevealFinal.score
+                        });
+
+                        updateGameControlsVisibility();
+                        updateForceResetButtonState();
+                        updateStartButtonState();
+                        updateActionButtonsState();
+                        setTableStatus(lastRoundMessage, lastRoundTone || 'info');
+                        return;
+                    }
+
+                    resetBatchState();
+                    clearCards();
+                    updateGameControlsVisibility();
+                    updateForceResetButtonState();
+                    updateStartButtonState();
+                    updateActionButtonsState();
+                    setTableStatus('Waiting for a new game.', 'info');
+                    return;
+                }
+
+                const [playerHandlesRaw, dealerHandlesRaw] = await contract.getPreparedHandles();
+                const playerHandles = Array.from(playerHandlesRaw, normalizeHandle);
+                const dealerHandles = Array.from(dealerHandlesRaw, normalizeHandle);
+
+                const playerHandlesHasValues = playerHandles.some((handle) => handle && handle !== ZERO_HANDLE);
+                const dealerHandlesHasValues = dealerHandles.some((handle) => handle && handle !== ZERO_HANDLE);
+
+                if (playerHandlesHasValues) {
+                    batchState.playerHandles = playerHandles;
+                }
+                if (dealerHandlesHasValues) {
+                    batchState.dealerHandles = dealerHandles;
+                }
+
+                const requiredHandles = playerHandles.slice(0, playerCardCount);
+                const extraHandles = [];
+                const dealerUpHandle = dealerHandles[0];
+                if (dealerUpHandle && dealerUpHandle !== ZERO_HANDLE) {
+                    extraHandles.push(dealerUpHandle);
+                }
+                if (phase === GAME_PHASE.Settling) {
+                    dealerHandles.forEach((handle) => {
+                        if (handle && handle !== ZERO_HANDLE) {
+                            extraHandles.push(handle);
+                        }
+                    });
+                }
+
+                try {
+                    await decryptHandles([...requiredHandles, ...extraHandles]);
+                } catch (error) {
+                    const message = (error?.message || 'User decrypt failed').toString();
+                    if (message.toLowerCase().includes('not authorized')) {
+                        updateStatus('Awaiting card allowance from the contract. Retrying...', 'info', true);
+                        setTimeout(() => {
+                            updateGameDisplayBatch();
+                        }, 1200);
+                    } else {
+                        updateStatus(`Decrypt failed: ${message}`, 'error');
+                    }
+                }
+
+                const playerCards = requiredHandles
+                    .filter((handle) => handle && handle !== ZERO_HANDLE)
+                    .map((handle) => valueForHandle(handle))
+                    .filter((value) => value && Number.isFinite(value));
+                if (playerCards.length) {
+                    lastPlayerKnownScore = calculateHandValue(playerCards);
+                    batchState.lastPlayerCardCount = Math.max(batchState.lastPlayerCardCount, playerCards.length);
+                    batchState.cachedPlayerCards = playerCards.slice();
+                }
+
+                const dealerHandlesFiltered = dealerHandles.filter((handle) => handle && handle !== ZERO_HANDLE);
+                const dealerValuesRaw = dealerHandlesFiltered.map((handle) => valueForHandle(handle)).filter((value) => value && Number.isFinite(value));
+                const isSettling = phase === GAME_PHASE.Settling;
+
+                let dealerCards = [];
+                let hideDealerHole = false;
+                let dealerScoreDisplay = null;
+                let hideHoleIndex = null;
+
+                if (isActive && !isSettling) {
+                    const dealerPreview = dealerValuesRaw.slice(0, Math.min(2, dealerValuesRaw.length));
+                    dealerCards = dealerPreview;
+                    hideDealerHole = dealerPreview.length > 1;
+                    hideHoleIndex = hideDealerHole ? 1 : null;
+                    dealerScoreDisplay = hideDealerHole ? null : calculateHandValue(dealerPreview);
+                    if (!hideDealerHole && dealerScoreDisplay !== null) {
+                        lastDealerKnownScore = dealerScoreDisplay;
+                    }
+                } else {
+                    const targetScore = lastDealerKnownScore || (dealerValuesRaw.length ? calculateHandValue(dealerValuesRaw) : null);
+                    const reveal = computeDealerRevealSequence(dealerValuesRaw, targetScore);
+                    dealerCards = reveal.cards;
+                    dealerScoreDisplay = reveal.score;
+                    hideDealerHole = false;
+                    hideHoleIndex = null;
+                    if (dealerScoreDisplay !== null) {
+                        lastDealerKnownScore = dealerScoreDisplay;
+                    }
+                    batchState.lastDealerCardCount = Math.max(batchState.lastDealerCardCount, dealerCards.length);
+                }
+
+                if (dealerCards.length) {
+                    batchState.cachedDealerCards = dealerCards.slice();
+                }
+
+                renderHand({
+                    containerId: 'player-cards',
+                    handKey: 'player',
+                    cards: playerCards,
+                    hiddenIndex: null,
+                    score: lastPlayerKnownScore
+                });
+
+                renderHand({
+                    containerId: 'dealer-cards',
+                    handKey: 'dealer',
+                    cards: dealerCards,
+                    hiddenIndex: hideHoleIndex,
+                    score: dealerScoreDisplay
+                });
+
+                updateGameControlsVisibility();
+                updateForceResetButtonState();
+                updateStartButtonState();
+                updateActionButtonsState();
+
+                const pendingStatus = computePendingStatus();
+                if (pendingStatus) {
+                    setTableStatus(pendingStatus.message, pendingStatus.tone);
+                } else {
+                    switch (phase) {
+                        case GAME_PHASE.Active:
+                            setTableStatus('Player turn. Decide to hit or stand.', 'info');
+                            break;
+                        case GAME_PHASE.AwaitingSettlement:
+                            setTableStatus('Player stood. Click “Settle Round” when ready.', 'info');
+                            break;
+                        case GAME_PHASE.Settling:
+                            setTableStatus('Settlement in progress...', 'progress');
+                            break;
+                        default:
+                            if (!isActive && lastRoundMessage) {
+                                setTableStatus(lastRoundMessage, lastRoundTone);
+                            } else {
+                                setTableStatus('Waiting for a new game.', 'info');
+                            }
+                            break;
+                    }
+                }
+            } catch (error) {
+                console.error('[batch] Error updating display:', error);
+            }
         }
 
-        async function handleGameEnded(resultRaw) {
-            const result = Number(resultRaw);
-            currentGameActive = false;
+        function handleBatchGameStarted(betAmountWei, deckDigest) {
+            resetBatchState();
+            batchState.phase = GAME_PHASE.Active;
+            currentGameActive = true;
+            currentBetWei = betAmountWei;
+            lastPlayerKnownScore = 0;
+            lastDealerKnownScore = null;
+            lastRoundMessage = null;
+            lastRoundTone = 'info';
+            setPendingRequestId(0n);
             updateGameControlsVisibility();
             updateForceResetButtonState();
-            document.getElementById('start-game').disabled = false;
+            updateStartButtonState();
+            updateActionButtonsState();
 
-            await updateGameDisplay();
-            
-            let resultText;
-            switch(result) {
-                case 2:
-                    resultText = "🎉 YOU WIN! 🎉";
-                    break;
-                case 3:
-                    resultText = "😔 DEALER WINS 😔";
-                    break;
-                case 4:
-                    resultText = "🤝 PUSH - TIE GAME 🤝";
-                    break;
-                default:
-                    resultText = "Game finished";
+            const betEth = formatUnits(betAmountWei, 18);
+            updateStatus(`🎲 Batch game started with ${betEth} ETH. Preparing encrypted cards...`, 'progress');
+            setTableStatus('Cards incoming...', 'progress');
+
+            updateGameDisplayBatch();
+        }
+
+        function handleBatchPlayerCardPrepared(slot, handle, totalCards) {
+            const normalized = normalizeHandle(handle);
+            if (normalized && normalized !== ZERO_HANDLE) {
+                batchState.playerHandles[slot] = normalized;
+                batchState.decrypted.delete(normalized);
+            }
+            batchState.playerCardCount = totalCards;
+            batchState.lastPlayerCardCount = Math.max(batchState.lastPlayerCardCount, totalCards);
+            updateStatus(`🂠 Card prepared in slot ${slot}.`, 'info', true);
+            updateGameDisplayBatch();
+        }
+
+        function handleBatchPlayerCardConsumed(slot, handle, totalCards) {
+            updateStatus(`🃏 Card dealt (slot ${slot}).`, 'info', true);
+            batchState.playerCardCount = totalCards;
+            batchState.lastPlayerCardCount = Math.max(batchState.lastPlayerCardCount, totalCards);
+            updateGameDisplayBatch();
+        }
+
+        function handleBatchDealerUpCardPrepared(handle) {
+            const normalized = normalizeHandle(handle);
+            if (normalized && normalized !== ZERO_HANDLE) {
+                batchState.dealerHandles[0] = normalized;
+                batchState.decrypted.delete(normalized);
+            }
+            updateGameDisplayBatch();
+        }
+
+        function handleBatchGameStanding(totalCards) {
+            batchState.phase = GAME_PHASE.AwaitingSettlement;
+            updateStatus('✋ Player stood. Ready to settle when you are.', 'info');
+            setTableStatus('Player stood. Click “Settle Round” when ready.', 'info');
+            updateActionButtonsState();
+            updateGameDisplayBatch();
+        }
+
+        function handleBatchSettlementRequested(requestId) {
+            setPendingRequestId(BigInt(requestId));
+            settleInFlight = true;
+            updateStatus(`🧾 Settlement requested (Gateway request ${requestId}).`, 'progress');
+            updateGameDisplayBatch();
+        }
+
+        function handleBatchRoundSettled(result, payout, playerScore, dealerScore) {
+            currentGameActive = false;
+            const betWei = currentBetWei;
+            currentBetWei = 0n;
+            setPendingRequestId(0n);
+            batchState.phase = GAME_PHASE.Idle;
+            settleInFlight = false;
+            const resultCode = Number(result);
+            const payoutWei = BigInt(payout);
+            let tone = 'info';
+            let message = 'Round settled.';
+            if (resultCode === 2) {
+                tone = 'success';
+                message = '🎉 YOU WIN! 🎉';
+            } else if (resultCode === 3) {
+                tone = 'error';
+                message = '😔 DEALER WINS 😔';
+            } else if (resultCode === 4) {
+                message = '🤝 PUSH - TIE GAME 🤝';
             }
 
-            const betUsed = currentBetWei;
-            let deltaWei = 0n;
+            const betSummary = betWei > 0n ? `Bet ${formatUnits(betWei, 18)} ETH` : null;
+            const payoutSummary = `Payout ${formatUnits(payoutWei, 18)} ETH`;
+            const net = payoutWei - betWei;
+            let netSummary;
+            if (net > 0n) {
+                netSummary = `Net +${formatUnits(net, 18)} ETH`;
+            } else if (net < 0n) {
+                netSummary = `Net -${formatUnits(-net, 18)} ETH`;
+            } else {
+                netSummary = 'Net 0 ETH';
+            }
 
-            if (betUsed > 0n) {
-                if (result === 2) {
-                    deltaWei = betUsed;
-                    if (lastPlayerScore === 21 && lastPlayerCardCount === 2) {
-                        deltaWei += (betUsed * 3n) / 2n;
+            const detailParts = [betSummary, payoutSummary, netSummary].filter(Boolean);
+            if (detailParts.length) {
+                message += ` — ${detailParts.join(' • ')}`;
+            }
+
+            lastRoundMessage = message;
+            lastRoundTone = tone;
+            lastPlayerKnownScore = Number(playerScore);
+            lastDealerKnownScore = Number(dealerScore);
+
+            updateStatus(message, tone);
+            setTableStatus(message, tone);
+            updateBetVerificationStatus(null, null);
+            updateGameControlsVisibility();
+            updateForceResetButtonState();
+            updateStartButtonState();
+            updateActionButtonsState();
+
+            updateGameDisplayBatch();
+
+            try {
+                const playerLogCards = extractPlayerCards(batchState.lastPlayerCardCount || batchState.playerHandles.length);
+                const dealerLogRaw = (batchState.dealerHandles || []).map((handle) => valueForHandle(handle));
+                const dealerLogReveal = computeDealerRevealSequence(dealerLogRaw, Number(dealerScore));
+                console.log('[batch] round settled', {
+                    result: resultCode,
+                    payoutWei: payoutWei.toString(),
+                    playerCards: playerLogCards,
+                    dealerCards: dealerLogReveal.cards,
+                    dealerScore: dealerLogReveal.score
+                });
+            } catch (logError) {
+                console.warn('[batch] failed to log final hands', logError);
+            }
+        }
+
+        function handleBatchSettlementFailed(reason) {
+            updateStatus(`Settlement failed: ${reason}`, 'error');
+            setTableStatus(`Settlement failed: ${reason}`, 'error');
+            updateBetVerificationStatus(null, null);
+            settleInFlight = false;
+            updateGameDisplayBatch();
+        }
+
+        function handleBatchForceReset() {
+            resetBatchState();
+            currentGameActive = false;
+            currentBetWei = 0n;
+            setPendingRequestId(0n);
+            clearCards();
+            updateGameControlsVisibility();
+            updateForceResetButtonState();
+            updateStartButtonState();
+            updateActionButtonsState();
+            setTableStatus('Round reset.', 'info');
+            lastRoundMessage = '♻️ Round reset. You can start a new game.';
+            lastRoundTone = 'info';
+            updateBetVerificationStatus(null, null);
+            settleInFlight = false;
+        }
+
+        function handleGameStartedEvent(betAmount, requestId) {
+            currentGameActive = true;
+            setPendingRequestId(BigInt(requestId));
+            currentBetWei = betAmount;
+            lastDealerKnownScore = null;
+            lastRoundMessage = null;
+            clearCards();
+            updateGameControlsVisibility();
+            updateForceResetButtonState();
+            updateStartButtonState();
+            updateActionButtonsState();
+
+            const betEth = formatUnits(betAmount, 18);
+            updateStatus(`🎲 Game started with ${betEth} ETH. Waiting for initial reveal (request ${requestId.toString()}).`, 'progress');
+            setTableStatus('Cards incoming...', 'progress');
+            updateBetVerificationStatus('success', 'Bet verified on-chain!');
+
+            setTimeout(updateGameDisplay, 500);
+            setTimeout(() => updateBetVerificationStatus(null, null), 4000);
+        }
+
+        function handleInitialHandRevealed(cardOne, cardTwo, dealerUp, requestId) {
+            setPendingRequestId(0n);
+            const cards = [Number(cardOne), Number(cardTwo)];
+            lastPlayerKnownScore = calculateHandValue(cards);
+            lastDealerKnownScore = null;
+            updateStatus('🂡 Initial hand revealed! Your move.', 'success');
+            setTableStatus('Player turn. Decide to hit or stand.', 'info');
+            updateActionButtonsState();
+            updateGameDisplay();
+        }
+
+        function handlePlayerCardRevealed(cardValue, cardIndex, newScore, requestId) {
+            setPendingRequestId(0n);
+            lastPlayerKnownScore = Number(newScore);
+            const displayValue = formatCardLabel(Number(cardValue));
+            updateStatus(`🃏 Hit revealed: ${displayValue} (score ${newScore.toString()}).`, 'info');
+            updateActionButtonsState();
+            updateGameDisplay();
+        }
+
+        function handleDealerCardRevealed(cardValue, cardIndex, newScore, requestId) {
+            lastDealerKnownScore = Number(newScore);
+            setPendingRequestId(0n);
+            const displayValue = formatCardLabel(Number(cardValue));
+            updateStatus(`🏠 Dealer reveals: ${displayValue} (dealer score ${newScore.toString()}).`, 'progress');
+            updateActionButtonsState();
+            updateGameDisplay();
+        }
+
+        function handleRoundSettledEvent(result, payout, playerScore, dealerScore) {
+            currentGameActive = false;
+            setPendingRequestId(0n);
+            currentGameState = Number(result);
+            currentBetWei = 0n;
+            lastPlayerKnownScore = Number(playerScore);
+            lastDealerKnownScore = Number(dealerScore);
+            updateGameControlsVisibility();
+            updateForceResetButtonState();
+            updateStartButtonState();
+            updateActionButtonsState();
+
+            const resultCode = Number(result);
+            let message;
+            let tone = 'info';
+            if (resultCode === 2) {
+                tone = 'success';
+                message = '🎉 YOU WIN! 🎉';
+            } else if (resultCode === 3) {
+                tone = 'error';
+                message = '😔 DEALER WINS 😔';
+            } else if (resultCode === 4) {
+                message = '🤝 PUSH - TIE GAME 🤝';
+            } else {
+                message = 'Game finished';
+            }
+
+            const payoutWei = BigInt(payout);
+            if (payoutWei !== 0n) {
+                const payoutEth = formatUnits(payoutWei, 18);
+                message += ` (payout ${payoutEth} ETH)`;
+            }
+
+            lastRoundMessage = message;
+            lastRoundTone = tone;
+            updateStatus(message, tone);
+            setTableStatus(message, tone);
+
+            updateGameDisplay();
+            setTimeout(() => {
+                checkBalance({ preserveTable: true });
+            }, 1200);
+        }
+
+        function handleForceResetEvent() {
+            currentGameActive = false;
+            setPendingRequestId(0n);
+            currentBetWei = 0n;
+            lastDealerKnownScore = null;
+            lastPlayerKnownScore = 0;
+            clearCards();
+            updateBetVerificationStatus(null, null);
+            updateGameControlsVisibility();
+            updateForceResetButtonState();
+            updateStartButtonState();
+            updateActionButtonsState();
+            setTableStatus('Round reset.', 'info');
+            lastRoundMessage = '♻️ Round reset. You can start a new game.';
+            lastRoundTone = 'info';
+        }
+
+        function setAuditStatus(message, tone = 'info') {
+            if (!auditElements.status) return;
+            auditElements.status.textContent = message;
+            auditElements.status.dataset.tone = tone;
+        }
+
+        function setAuditBusy(isBusy) {
+            auditInFlight = isBusy;
+            auditButtons.forEach((button) => {
+                if (button) {
+                    button.disabled = isBusy;
+                }
+            });
+        }
+
+        function clearAuditResults() {
+            if (!auditElements.results) return;
+            auditElements.results.innerHTML = '';
+        }
+
+        function renderAuditResults(entries) {
+            if (!auditElements.results) return;
+            auditElements.results.innerHTML = '';
+
+            if (!entries.length) {
+                const empty = document.createElement('div');
+                empty.className = 'audit-empty';
+                empty.textContent = 'No events to display.';
+                auditElements.results.appendChild(empty);
+                return;
+            }
+
+            entries.forEach((entry) => {
+                const card = document.createElement('div');
+                card.className = 'audit-event';
+
+                const heading = document.createElement('div');
+                heading.className = 'audit-event-heading';
+                heading.innerHTML = `<span>${entry.label}</span><span>Block #${entry.blockNumber}</span>`;
+                card.appendChild(heading);
+
+                const meta = document.createElement('div');
+                meta.className = 'audit-event-meta';
+                meta.textContent = `tx ${entry.transactionHash}`;
+                card.appendChild(meta);
+
+                if (entry.notes && entry.notes.length) {
+                    const notesList = document.createElement('ul');
+                    notesList.className = 'audit-event-notes';
+                    entry.notes.forEach((note) => {
+                        const item = document.createElement('li');
+                        item.textContent = note;
+                        notesList.appendChild(item);
+                    });
+                    card.appendChild(notesList);
+                }
+
+                auditElements.results.appendChild(card);
+            });
+        }
+
+        function formatWeiForDisplay(value) {
+            try {
+                const big = typeof value === 'bigint' ? value : BigInt(value);
+                if (big === 0n) {
+                    return '0 ETH';
+                }
+                return `${formatUnits(big, 18)} ETH`;
+            } catch (error) {
+                return value?.toString?.() ?? String(value ?? '');
+            }
+        }
+
+        function stringifyValue(value) {
+            if (typeof value === 'bigint') {
+                return value.toString();
+            }
+            if (value === null || value === undefined) {
+                return '';
+            }
+            return value.toString();
+        }
+
+        function describeAuditEvent(name, args) {
+            const requestId = args?.requestId ? stringifyValue(args.requestId) : undefined;
+            switch (name) {
+                case 'GameStarted':
+                    return [
+                        `player: ${args.player}`,
+                        `bet: ${formatWeiForDisplay(args.betAmount)}`,
+                        `requestId: ${requestId}`
+                    ];
+                case 'InitialHandRevealed':
+                    return [
+                        `player: ${args.player}`,
+                        `initial cards: ${formatCardLabel(Number(args.playerCardOne))}, ${formatCardLabel(Number(args.playerCardTwo))}`,
+                        `dealer up: ${formatCardLabel(Number(args.dealerUpCard))}`,
+                        `requestId: ${requestId}`
+                    ];
+                case 'PlayerCardRevealed':
+                    return [
+                        `player: ${args.player}`,
+                        `card index: ${stringifyValue(args.cardIndex)}`,
+                        `card: ${formatCardLabel(Number(args.cardValue))}`,
+                        `new score: ${stringifyValue(args.newScore)}`,
+                        `requestId: ${requestId}`
+                    ];
+                case 'DealerCardRevealed':
+                    return [
+                        `player: ${args.player}`,
+                        `dealer card index: ${stringifyValue(args.cardIndex)}`,
+                        `card: ${formatCardLabel(Number(args.cardValue))}`,
+                        `dealer score: ${stringifyValue(args.newScore)}`,
+                        `requestId: ${requestId}`
+                    ];
+                case 'RoundSettled': {
+                    const resultMap = {
+                        0: 'unknown',
+                        1: 'active',
+                        2: 'player win',
+                        3: 'dealer win',
+                        4: 'push'
+                    };
+                    const resultCode = Number(args.result);
+                    return [
+                        `player: ${args.player}`,
+                        `result: ${resultMap[resultCode] || `code ${resultCode}`}`,
+                        `payout: ${formatWeiForDisplay(args.payout)}`,
+                        `player score: ${stringifyValue(args.playerScore)}`,
+                        `dealer score: ${stringifyValue(args.dealerScore)}`
+                    ];
+                }
+                case 'InvalidBetReveal':
+                    return [
+                        `player: ${args.player}`,
+                        `claimed: ${formatWeiForDisplay(args.claimedAmount)}`,
+                        `revealed: ${formatWeiForDisplay(args.revealedAmount)}`
+                    ];
+                case 'DuplicateCardResampled': {
+                    const hand = args.isPlayerHand ? 'player' : 'dealer';
+                    return [
+                        `player: ${args.player}`,
+                        `hand: ${hand}`,
+                        `card index: ${stringifyValue(args.cardIndex)}`,
+                        `requestId: ${requestId}`
+                    ];
+                }
+                case 'ForceReset':
+                    return [`player: ${args.player}`];
+                default: {
+                    const keys = Object.keys(args || {}).filter((key) => Number.isNaN(Number(key)));
+                    if (!keys.length) {
+                        return [];
                     }
-                } else if (result === 3) {
-                    deltaWei = -betUsed;
+                    return keys.map((key) => `${key}: ${stringifyValue(args[key])}`);
                 }
             }
+        }
 
-            if (deltaWei !== 0n) {
-                const isGain = deltaWei > 0n;
-                const absWei = isGain ? deltaWei : -deltaWei;
-                const deltaEth = formatUnits(absWei, 18);
-                resultText += ` (${isGain ? '+' : '-'}${deltaEth} ETH)`;
-            } else if (result === 4 && betUsed > 0n) {
-                resultText += ' (bet returned)';
+        function parseBlockInput(raw) {
+            if (!raw) {
+                return undefined;
+            }
+            const value = Number(raw);
+            if (!Number.isFinite(value) || value < 0) {
+                throw new Error('Block numbers must be non-negative.');
+            }
+            return Math.floor(value);
+        }
+
+        async function deriveAuditRange() {
+            const fromRaw = auditElements.from ? auditElements.from.value.trim() : '';
+            const toRaw = auditElements.to ? auditElements.to.value.trim() : '';
+
+            let fromBlock = parseBlockInput(fromRaw);
+            let toBlock = parseBlockInput(toRaw);
+
+            if (toBlock === undefined) {
+                toBlock = await auditProvider.getBlockNumber();
+            }
+            if (fromBlock === undefined) {
+                fromBlock = Math.max(0, toBlock - AUDIT_DEFAULT_LOOKBACK);
+            }
+            if (fromBlock > toBlock) {
+                throw new Error('From block must be less than or equal to To block.');
+            }
+            return { fromBlock, toBlock };
+        }
+
+        function mapEventLogToEntry(event) {
+            const name = event.event || event.fragment?.name || 'Event';
+            return {
+                blockNumber: Number(event.blockNumber),
+                transactionHash: event.transactionHash,
+                label: name,
+                notes: describeAuditEvent(name, event.args)
+            };
+        }
+
+        async function auditPlayerRounds() {
+            if (!auditElements.player) {
+                return;
+            }
+            const input = auditElements.player.value.trim();
+            if (!input) {
+                setAuditStatus('Enter a player address to query.', 'error');
+                return;
+            }
+            if (!isAddress(input)) {
+                setAuditStatus('Invalid player address.', 'error');
+                return;
+            }
+            if (auditInFlight) {
+                return;
             }
 
-            const tone = result === 2 ? 'success' : result === 3 ? 'error' : 'info';
-            updateStatus(resultText, tone);
-            lastRoundMessage = resultText;
-            lastRoundTone = tone;
+            setAuditBusy(true);
+            clearAuditResults();
+            setAuditStatus('Fetching events from Sepolia...', 'progress');
 
-            // Update balance after game
-            setTimeout(async () => {
-                await checkBalance({ preserveTable: true });
-            }, 1000);
+            try {
+                const { fromBlock, toBlock } = await deriveAuditRange();
+                const auditEvents = AUDIT_EVENT_CONFIG[currentMode] || AUDIT_EVENT_CONFIG.legacy || [];
+                const filterFactories = auditEvents
+                    .map((eventName) => {
+                        const factory = auditContract?.filters?.[eventName];
+                        if (typeof factory !== 'function') {
+                            console.debug('[audit] skipping unavailable event filter', eventName);
+                            return null;
+                        }
+                        try {
+                            return factory(input);
+                        } catch (filterError) {
+                            console.warn('[audit] failed to build filter for', eventName, filterError);
+                            return null;
+                        }
+                    })
+                    .filter(Boolean);
 
-            currentBetWei = 0n;
+                if (!filterFactories.length) {
+                    setAuditStatus('This contract ABI does not expose audit filters yet. Try switching modes or updating the deployment.', 'error');
+                    renderAuditResults([]);
+                    return;
+                }
+
+                const results = await Promise.allSettled(
+                    filterFactories.map((filter) => auditContract.queryFilter(filter, fromBlock, toBlock))
+                );
+
+                let hadFailures = false;
+                const entries = [];
+                results.forEach((result) => {
+                    if (result.status === 'fulfilled') {
+                        result.value.forEach((event) => {
+                            entries.push(mapEventLogToEntry(event));
+                        });
+                    } else {
+                        hadFailures = true;
+                        console.warn('Audit log query failed', result.reason);
+                    }
+                });
+
+                entries.sort((a, b) => a.blockNumber - b.blockNumber);
+                renderAuditResults(entries);
+
+                if (!entries.length) {
+                    const suffix = hadFailures ? ' Some event types may be missing; try narrowing the block range.' : '';
+                    const tone = hadFailures ? 'progress' : 'info';
+                    setAuditStatus(`No events found for ${shortAddress(input)} between blocks ${fromBlock} and ${toBlock}.${suffix}`, tone);
+                } else {
+                    const suffix = hadFailures ? ' (partial result, narrow the block range to retrieve remaining logs)' : '';
+                    setAuditStatus(`Found ${entries.length} event${entries.length === 1 ? '' : 's'} for ${shortAddress(input)} between blocks ${fromBlock} and ${toBlock}.${suffix}`, hadFailures ? 'progress' : 'success');
+                }
+            } catch (error) {
+                console.error('Player audit failed', error);
+                setAuditStatus(`Player query failed: ${error?.message || error}`, 'error');
+            } finally {
+                setAuditBusy(false);
+            }
+        }
+
+        async function auditTransaction() {
+            if (!auditElements.tx) {
+                return;
+            }
+            const txHash = auditElements.tx.value.trim();
+            if (!txHash) {
+                setAuditStatus('Enter a transaction hash to inspect.', 'error');
+                return;
+            }
+            if (!/^0x([A-Fa-f0-9]{64})$/.test(txHash)) {
+                setAuditStatus('Invalid transaction hash format.', 'error');
+                return;
+            }
+            if (auditInFlight) {
+                return;
+            }
+
+            setAuditBusy(true);
+            clearAuditResults();
+            setAuditStatus('Fetching transaction logs...', 'progress');
+
+            try {
+                const receipt = await auditProvider.getTransactionReceipt(txHash);
+                if (!receipt) {
+                    setAuditStatus('Transaction not found on Sepolia.', 'error');
+                    return;
+                }
+
+                const entries = [];
+                for (const log of receipt.logs) {
+                    if (log.address.toLowerCase() !== contractAddressLower) {
+                        continue;
+                    }
+                    try {
+                        const parsed = auditContract.interface.parseLog(log);
+                        entries.push({
+                            blockNumber: Number(log.blockNumber),
+                            transactionHash: log.transactionHash,
+                            label: parsed.name,
+                            notes: describeAuditEvent(parsed.name, parsed.args)
+                        });
+                    } catch (parseError) {
+                        console.warn('Failed to parse log', parseError);
+                    }
+                }
+
+                entries.sort((a, b) => a.blockNumber - b.blockNumber);
+                renderAuditResults(entries);
+
+                if (!entries.length) {
+                    setAuditStatus('No FHE Blackjack events found in this transaction.', 'info');
+                } else {
+                    setAuditStatus(`Found ${entries.length} event${entries.length === 1 ? '' : 's'} in transaction ${txHash.slice(0, 10)}…`, 'success');
+                }
+            } catch (error) {
+                console.error('Transaction audit failed', error);
+                setAuditStatus(`Transaction query failed: ${error?.message || error}`, 'error');
+            } finally {
+                setAuditBusy(false);
+            }
         }
 
         // Event listeners
@@ -1156,7 +4054,69 @@
         document.getElementById('hit').addEventListener('click', hit);
         document.getElementById('stand').addEventListener('click', stand);
         document.getElementById('force-reset').addEventListener('click', forceResetGame);
-        
+        const settleButtonEl = document.getElementById('settle');
+        if (settleButtonEl) {
+            settleButtonEl.addEventListener('click', settleRound);
+        }
+        const modeSelectEl = document.getElementById('game-mode');
+        if (modeSelectEl) {
+            modeSelectEl.value = currentMode;
+            modeSelectEl.addEventListener('change', (event) => {
+                const targetMode = event.target.value;
+                switchMode(targetMode).catch((error) => {
+                    console.error('Mode switch failed:', error);
+                });
+            });
+        }
+
+        announceModeSelection();
+        if (window.ethereum && typeof window.ethereum.on === 'function') {
+            window.ethereum.on('accountsChanged', (accounts) => {
+                if (!accounts || accounts.length === 0) {
+                    setConnectWalletState(false);
+                    resetWalletState();
+                } else if (walletConnected) {
+                    userAddress = accounts[0];
+                    document.getElementById('wallet-address').textContent = shortAddress(userAddress);
+                }
+            });
+
+            window.ethereum.on('disconnect', () => {
+                setConnectWalletState(false);
+                resetWalletState();
+            });
+        }
+        setConnectWalletState(false);
+        if (auditButtons[0]) {
+            auditButtons[0].addEventListener('click', auditPlayerRounds);
+        }
+        if (auditButtons[1]) {
+            auditButtons[1].addEventListener('click', auditTransaction);
+        }
+        if (useLastTxBtn) {
+            useLastTxBtn.addEventListener('click', async () => {
+                if (!latestTxHash) {
+                    return;
+                }
+                if (auditElements.tx) {
+                    auditElements.tx.value = latestTxHash;
+                    if (typeof auditElements.tx.select === 'function') {
+                        auditElements.tx.select();
+                    }
+                }
+                if (navigator.clipboard && typeof navigator.clipboard.writeText === 'function') {
+                    try {
+                        await navigator.clipboard.writeText(latestTxHash);
+                    } catch (copyError) {
+                        console.warn('Clipboard copy failed', copyError);
+                    }
+                }
+                if (auditElements.status) {
+                    setAuditStatus('Transaction hash ready in the audit form. Paste or run the inspector when you are ready.', 'success');
+                }
+            });
+        }
+
         // Update start game button when bet amount changes
         document.getElementById('bet-amount').addEventListener('input', () => {
             updateBetWeiDisplay();
@@ -1175,6 +4135,7 @@
         updateStartButtonState();
         updateForceResetButtonState();
         updateGameControlsVisibility();
+        updateActionButtonsState();
         setTableStatus(document.getElementById('status').textContent, 'info');
     </script>
 </body>
