@@ -79,7 +79,7 @@ mapping(uint256 => address) internal requestOwner;
     event DealerUpCardPrepared(address indexed player, bytes32 handle);
     event PlayerCardConsumed(address indexed player, uint8 slot, bytes32 handle, uint8 totalCards);
     event GameStanding(address indexed player, uint8 totalCards);
-    event SettlementRequested(address indexed player, uint256 requestId);
+    event SettlementRequested(address indexed player, uint256 requestId, uint8 playerCardCount);
     event RoundSettled(address indexed player, uint8 result, uint256 payout, uint8 playerScore, uint8 dealerScore);
     event SettlementFailed(address indexed player, string reason);
 
@@ -89,6 +89,7 @@ mapping(uint256 => address) internal requestOwner;
     error SettlementPending(address player);
     error InvalidReveal(uint256 requestId);
     error TooManyCards(address player);
+    error InvalidPlayerCardCount(uint8 requested);
 
     modifier ensureActive(address player) {
         Game storage game = games[player];
@@ -206,17 +207,25 @@ mapping(uint256 => address) internal requestOwner;
         emit RoundSettled(msg.sender, RESULT_PUSH, game.betAmount, 0, 0);
     }
 
-    function settleRound() external {
+    function settleRound(uint8 playerCardCountDeclared) external {
         Game storage game = games[msg.sender];
         if (!game.isActive) {
             revert NoActiveGame(msg.sender);
         }
-        if (game.phase != GamePhase.AwaitingSettlement) {
+        if (game.phase != GamePhase.Active && game.phase != GamePhase.AwaitingSettlement) {
             revert SettlementNotReady(msg.sender);
         }
         if (game.pendingRequestId != 0) {
             revert SettlementPending(msg.sender);
         }
+
+        if (playerCardCountDeclared < 2 || playerCardCountDeclared > PLAYER_MAX_CARDS) {
+            revert InvalidPlayerCardCount(playerCardCountDeclared);
+        }
+
+        game.playerCardCount = playerCardCountDeclared;
+        game.nextPlayerSlot = playerCardCountDeclared;
+        game.phase = GamePhase.Settling;
 
         CardDeck storage deck = decks[msg.sender];
         bytes32[] memory handles = new bytes32[](PLAYER_MAX_CARDS + DEALER_MAX_CARDS);
@@ -229,10 +238,9 @@ mapping(uint256 => address) internal requestOwner;
 
         uint256 requestId = FHE.requestDecryption(handles, this.onSettlementReveal.selector);
         game.pendingRequestId = requestId;
-        game.phase = GamePhase.Settling;
         requestOwner[requestId] = msg.sender;
 
-        emit SettlementRequested(msg.sender, requestId);
+        emit SettlementRequested(msg.sender, requestId, playerCardCountDeclared);
     }
 
     function onSettlementReveal(

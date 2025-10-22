@@ -1377,7 +1377,7 @@
     }
   ];
 
-        const batchContractAddress = "0x71297d478d995327C9d075Ad433886f1EB7b1456"; // Update after deploying FHEBlackjackBatch
+        const batchContractAddress = "0xb85e00F1aF3d08360915b2286d608E1d4eAb275d"; // Update after deploying FHEBlackjackBatch
         const batchContractArtifact = await (await fetch('artifacts/contracts/FHEBlackjackBatch.sol/FHEBlackjackBatch.json')).json();
         const batchContractABI = batchContractArtifact.abi;
 
@@ -1412,12 +1412,13 @@
                 'PlayerCardConsumed',
                 'GameStanding',
                 'SettlementRequested',
+                'DecryptionFulfilled',
                 'RoundSettled',
                 'SettlementFailed'
             ]
         };
 
-        let currentMode = 'legacy';
+        let currentMode = 'batch';
         let contractAddress = CONTRACT_CONFIG[currentMode].address;
         let contractABI = CONTRACT_CONFIG[currentMode].abi;
         let contractAddressLower = contractAddress.toLowerCase();
@@ -1473,6 +1474,8 @@
         let latestTxLabel = '';
 
         const ZERO_HANDLE = '0x0000000000000000000000000000000000000000000000000000000000000000';
+        const PLAYER_MAX_CARDS = 10;
+        const DEALER_MAX_CARDS = 10;
         const GAME_PHASE = {
             Idle: 0,
             Active: 1,
@@ -1492,7 +1495,9 @@
             lastPlayerCardCount: 0,
             lastDealerCardCount: 0,
             cachedPlayerCards: [],
-            cachedDealerCards: []
+            cachedDealerCards: [],
+            virtualCount: 0,
+            stood: false
         };
         let userDecryptSession = null;
         let userDecryptSessionPromise = null;
@@ -1537,7 +1542,9 @@
                 lastPlayerCardCount: 0,
                 lastDealerCardCount: 0,
                 cachedPlayerCards: [],
-                cachedDealerCards: []
+                cachedDealerCards: [],
+                virtualCount: 0,
+                stood: false
             };
         }
 
@@ -1788,9 +1795,9 @@
                 }
             });
 
-            contract.on('SettlementRequested', (player, requestId) => {
+            contract.on('SettlementRequested', (player, requestId, playerCardCount) => {
                 if (player.toLowerCase() === listenerAddress) {
-                    handleBatchSettlementRequested(requestId);
+                    handleBatchSettlementRequested(requestId, Number(playerCardCount || 0));
                 }
             });
 
@@ -2258,18 +2265,32 @@
             }
 
             if (currentMode === 'batch') {
-                const hitDisabled = !contract || !currentGameActive || pendingRequestId !== 0n || batchState.phase !== GAME_PHASE.Active;
-                if (hitButton) hitButton.disabled = hitDisabled;
-                if (standButton) standButton.disabled = hitDisabled;
-                if (settleButton) {
-                    const canSettle =
-                        !!contract &&
-                        currentGameActive &&
-                        batchState.phase === GAME_PHASE.AwaitingSettlement &&
-                        pendingRequestId === 0n &&
-                        !settleInFlight;
-                    settleButton.disabled = !canSettle;
-                }
+                const playerCount = batchState.virtualCount || 2;
+                const canHit =
+                    !!contract &&
+                    currentGameActive &&
+                    pendingRequestId === 0n &&
+                    !batchState.stood &&
+                    !settleInFlight &&
+                    !actionInFlight &&
+                    playerCount < PLAYER_MAX_CARDS;
+                const canStand =
+                    !!contract &&
+                    currentGameActive &&
+                    pendingRequestId === 0n &&
+                    !settleInFlight &&
+                    !actionInFlight &&
+                    !batchState.stood;
+                const canSettle =
+                    !!contract &&
+                    currentGameActive &&
+                    pendingRequestId === 0n &&
+                    !settleInFlight &&
+                    (batchState.stood || playerCount >= PLAYER_MAX_CARDS);
+
+                if (hitButton) hitButton.disabled = !canHit;
+                if (standButton) standButton.disabled = !canStand;
+                if (settleButton) settleButton.disabled = !canSettle;
                 return;
             }
 
@@ -2418,12 +2439,31 @@
                 .filter((value) => value && Number.isFinite(value));
         }
 
-        function computeDealerRevealSequence(rawCards, targetScore) {
+        function computeDealerRevealSequence(rawCards, targetScore, phase) {
+            const cards = rawCards.filter((value) => value && Number.isFinite(value));
             const sequence = [];
             let total = 0;
             let aces = 0;
 
-            const cards = rawCards.filter((value) => value && Number.isFinite(value));
+            const shouldStop = (currentTotal, length, remaining) => {
+                if (phase === GAME_PHASE.Active || phase === GAME_PHASE.AwaitingSettlement) {
+                    return length >= Math.min(2, rawCards.length);
+                }
+                if (targetScore) {
+                    return currentTotal === targetScore && (currentTotal >= 17 || length >= cards.length);
+                }
+                if (currentTotal > 21) {
+                    return true;
+                }
+                if (currentTotal >= 17 && length >= 2) {
+                    if (currentTotal === 17 && remaining.some((value) => getCardRank(value) === 1)) {
+                        return false;
+                    }
+                    return true;
+                }
+                return false;
+            };
+
             for (let i = 0; i < cards.length; i++) {
                 const card = cards[i];
                 const rank = getCardRank(card);
@@ -2443,20 +2483,13 @@
                     aces -= 1;
                 }
 
-                const reachedStand = total >= 17 || sequence.length >= cards.length;
-                if (targetScore) {
-                    if (total === targetScore && reachedStand) {
-                        break;
-                    }
-                } else if (reachedStand && sequence.length >= 2) {
+                const remaining = cards.slice(i + 1);
+                if (shouldStop(total, sequence.length, remaining)) {
                     break;
                 }
             }
 
-            return {
-                cards: sequence,
-                score: total
-            };
+            return { cards: sequence, score: total };
         }
 
         function normalizePendingValue(value) {
@@ -3016,6 +3049,10 @@
         }
 
         async function hit() {
+            if (currentMode === 'batch') {
+                await hitBatchLocal();
+                return;
+            }
             if (!contract) return;
             if (experimentalModeActive) {
                 updateStatus('Batch mode preview: hit action disabled until gameplay wiring lands.', 'info');
@@ -3057,6 +3094,10 @@
         }
 
         async function stand() {
+            if (currentMode === 'batch') {
+                standBatchLocal();
+                return;
+            }
             if (!contract) return;
             if (experimentalModeActive) {
                 updateStatus('Batch mode preview: stand action disabled until batch flow is finished.', 'info');
@@ -3103,36 +3144,154 @@
         }
 
         async function settleRound() {
-            if (!contract) return;
-            if (currentMode !== 'batch') {
-                updateStatus('Settlement is only available in batch mode.', 'info');
+            if (currentMode === 'batch') {
+                await settleBatchLocal();
                 return;
             }
-            if (experimentalModeActive) {
-                updateStatus('Batch mode preview: settlement flow will arrive in a future update.', 'info');
+            updateStatus('Settlement is only available in batch mode.', 'info');
+        }
+
+        async function hitBatchLocal() {
+            if (!contract) {
+                updateStatus('Connect your wallet to start playing.', 'info');
                 return;
             }
-            if (actionInFlight) {
-                updateStatus('Another action is in progress. Please wait a moment.', 'info', true);
+            if (!currentGameActive) {
+                updateStatus('Start a batch game first.', 'info');
+                return;
+            }
+            if (settleInFlight || actionInFlight || pendingRequestId !== 0n) {
+                updateStatus('等当前结算完成再继续行动。', 'info');
+                return;
+            }
+            if (batchState.stood) {
+                updateStatus('你已经选择 Stand，无法继续 Hit。', 'info');
+                return;
+            }
+
+            const nextIndex = batchState.virtualCount || 2;
+            if (nextIndex >= PLAYER_MAX_CARDS) {
+                updateStatus('已经达到最大手牌数量。', 'info');
+                return;
+            }
+
+            const handle = batchState.playerHandles[nextIndex];
+            if (!handle || handle === ZERO_HANDLE) {
+                updateStatus('等待牌面同步，请稍后再试。', 'info');
+                await updateGameDisplayBatch();
+                return;
+            }
+
+            try {
+                actionInFlight = true;
+                updateActionButtonsState();
+                await decryptHandles([handle]);
+
+                const cardValue = valueForHandle(handle);
+                batchState.virtualCount = nextIndex + 1;
+                batchState.playerCardCount = batchState.virtualCount;
+                batchState.lastPlayerCardCount = Math.max(batchState.lastPlayerCardCount, batchState.virtualCount);
+
+                if (cardValue) {
+                    updateStatus(`🃏 Hit：${formatCardLabel(cardValue)}（第 ${batchState.virtualCount} 张牌）`, 'info');
+                } else {
+                    updateStatus('🃏 Hit 完成，牌面解密中...', 'info');
+                }
+
+                await updateGameDisplayBatch();
+
+                const playerCards = extractPlayerCards(batchState.virtualCount);
+                const playerScore = calculateHandValue(playerCards);
+                if (playerScore > 21) {
+                    batchState.stood = true;
+                    batchState.phase = GAME_PHASE.AwaitingSettlement;
+                    updateStatus(`💥 爆牌（${playerScore}），自动结算中...`, 'error');
+                    await updateGameDisplayBatch();
+                    await settleBatchLocal(true);
+                    return;
+                }
+            } catch (error) {
+                console.error('[batch] local hit failed', error);
+                updateStatus('Hit 发生错误：' + (error?.message || error), 'error');
+            } finally {
+                actionInFlight = false;
+                updateActionButtonsState();
+            }
+        }
+
+        function standBatchLocal() {
+            if (!contract) {
+                updateStatus('Connect your wallet to start playing.', 'info');
+                return;
+            }
+            if (!currentGameActive) {
+                updateStatus('请先启动一局批量模式的游戏，再选择 Stand。', 'info');
+                return;
+            }
+            if (settleInFlight || pendingRequestId !== 0n) {
+                updateStatus('等待当前结算完成。', 'info');
+                return;
+            }
+            if (batchState.stood) {
+                updateStatus('已经选择 Stand，可直接结算。', 'info');
+                return;
+            }
+
+            batchState.stood = true;
+            batchState.phase = GAME_PHASE.AwaitingSettlement;
+            updateStatus('✋ Player stood. Ready to settle when you are.', 'info');
+            setTableStatus('Player stood. Click “Settle Round” when ready.', 'info');
+            updateActionButtonsState();
+            updateGameDisplayBatch();
+        }
+
+        async function settleBatchLocal(autoTriggered = false) {
+            if (!contract) {
+                updateStatus('Connect your wallet to start playing.', 'info');
+                return;
+            }
+            if (!currentGameActive) {
+                updateStatus('当前没有进行中的批量对局。', 'info');
+                return;
+            }
+            if (settleInFlight || pendingRequestId !== 0n) {
+                updateStatus('结算请求已发送，等待 Gateway 返回即可。', 'info');
+                return;
+            }
+
+            if (!batchState.stood && !autoTriggered) {
+                updateStatus('先选择 Stand，再进行结算。', 'info');
+                return;
+            }
+
+            const declaredCount = Math.max(batchState.virtualCount || 0, 2);
+            if (declaredCount > PLAYER_MAX_CARDS) {
+                updateStatus('超过最大手牌数量，无法结算。', 'error');
                 return;
             }
 
             try {
                 actionInFlight = true;
                 settleInFlight = true;
+                batchState.phase = GAME_PHASE.Settling;
+                batchState.virtualCount = declaredCount;
                 updateActionButtonsState();
-                updateStatus('🧾 Requesting settlement...', 'progress');
-                const tx = await contract.settleRound();
+                if (!autoTriggered) {
+                    updateStatus('🧾 Requesting settlement...', 'progress');
+                }
+
+                const tx = await contract.settleRound(declaredCount);
                 recordLatestTransaction(tx.hash, 'Settle Round');
                 await tx.wait();
                 updateStatus('🧾 Settlement requested. Await Gateway reveal for results.', 'progress');
+                await updateGameDisplayBatch();
             } catch (error) {
-                console.error('Error settling round:', error);
+                console.error('[batch] settle failed', error);
                 const message = (error?.reason || error?.message || 'Settle failed').toString();
                 updateStatus('Settle failed: ' + message, 'error');
                 await refreshPendingStateFromChain();
                 settleInFlight = false;
-                updateActionButtonsState();
+                batchState.phase = GAME_PHASE.AwaitingSettlement;
             } finally {
                 actionInFlight = false;
                 updateActionButtonsState();
@@ -3236,6 +3395,10 @@
                 batchState.pendingId = pendingId;
                 batchState.settleAvailableAt = settleAvailableAt;
 
+                if (batchState.virtualCount < playerCardCount) {
+                    batchState.virtualCount = playerCardCount;
+                }
+
                 if (playerCardCount > 0) {
                     batchState.lastPlayerCardCount = playerCardCount;
                 }
@@ -3243,7 +3406,18 @@
 
                 const isActive = phase === GAME_PHASE.Active || phase === GAME_PHASE.AwaitingSettlement || phase === GAME_PHASE.Settling;
                 currentGameActive = isActive;
-                currentGameState = phase;
+                let effectivePhase = phase;
+                if (batchState.stood && phase === GAME_PHASE.Active) {
+                    effectivePhase = GAME_PHASE.AwaitingSettlement;
+                }
+                if (settleInFlight && phase === GAME_PHASE.Active) {
+                    effectivePhase = GAME_PHASE.Settling;
+                }
+                if (!isActive && settleInFlight) {
+                    effectivePhase = GAME_PHASE.Settling;
+                }
+                batchState.phase = effectivePhase;
+                currentGameState = effectivePhase;
                 setPendingRequestId(isActive ? pendingId : 0n);
 
                 if (!isActive && playerCardCount === 0 && batchState.pendingId === 0n) {
@@ -3255,7 +3429,7 @@
                         }
 
                         const dealerRawFinal = (batchState.dealerHandles || []).map((handle) => valueForHandle(handle));
-                        let dealerRevealFinal = computeDealerRevealSequence(dealerRawFinal, lastDealerKnownScore);
+                        let dealerRevealFinal = computeDealerRevealSequence(dealerRawFinal, lastDealerKnownScore, GAME_PHASE.Settling);
                         if ((!dealerRevealFinal.cards || dealerRevealFinal.cards.length === 0) && batchState.cachedDealerCards.length) {
                             dealerRevealFinal = {
                                 cards: batchState.cachedDealerCards.slice(),
@@ -3311,22 +3485,20 @@
                     batchState.dealerHandles = dealerHandles;
                 }
 
-                const requiredHandles = playerHandles.slice(0, playerCardCount);
-                const extraHandles = [];
-                const dealerUpHandle = dealerHandles[0];
-                if (dealerUpHandle && dealerUpHandle !== ZERO_HANDLE) {
-                    extraHandles.push(dealerUpHandle);
-                }
-                if (phase === GAME_PHASE.Settling) {
-                    dealerHandles.forEach((handle) => {
-                        if (handle && handle !== ZERO_HANDLE) {
-                            extraHandles.push(handle);
-                        }
-                    });
+                const effectivePlayerCount = Math.max(playerCardCount, batchState.virtualCount || 0, batchState.lastPlayerCardCount || 0);
+                const requiredHandles = playerHandles.slice(0, effectivePlayerCount);
+                const handlesToDecrypt = [...requiredHandles];
+                if (effectivePhase === GAME_PHASE.Active) {
+                    const dealerPreviewHandles = dealerHandles.slice(0, Math.min(2, dealerHandles.length));
+                    handlesToDecrypt.push(...dealerPreviewHandles);
+                } else {
+                    handlesToDecrypt.push(...dealerHandles);
                 }
 
+                const uniqueHandles = handlesToDecrypt.filter((handle) => handle && handle !== ZERO_HANDLE);
+
                 try {
-                    await decryptHandles([...requiredHandles, ...extraHandles]);
+                    await decryptHandles(uniqueHandles);
                 } catch (error) {
                     const message = (error?.message || 'User decrypt failed').toString();
                     if (message.toLowerCase().includes('not authorized')) {
@@ -3348,39 +3520,47 @@
                     batchState.lastPlayerCardCount = Math.max(batchState.lastPlayerCardCount, playerCards.length);
                     batchState.cachedPlayerCards = playerCards.slice();
                 }
+                batchState.playerCardCount = Math.max(batchState.playerCardCount, playerCards.length, effectivePlayerCount);
+                batchState.virtualCount = Math.max(batchState.virtualCount || 0, effectivePlayerCount);
 
                 const dealerHandlesFiltered = dealerHandles.filter((handle) => handle && handle !== ZERO_HANDLE);
-                const dealerValuesRaw = dealerHandlesFiltered.map((handle) => valueForHandle(handle)).filter((value) => value && Number.isFinite(value));
-                const isSettling = phase === GAME_PHASE.Settling;
+                const dealerValuesRaw = dealerHandlesFiltered
+                    .map((handle) => valueForHandle(handle))
+                    .filter((value) => value && Number.isFinite(value));
 
                 let dealerCards = [];
-                let hideDealerHole = false;
                 let dealerScoreDisplay = null;
-                let hideHoleIndex = null;
+                
+                const targetScore = lastDealerKnownScore || (dealerValuesRaw.length ? calculateHandValue(dealerValuesRaw) : null);
 
-                if (isActive && !isSettling) {
-                    const dealerPreview = dealerValuesRaw.slice(0, Math.min(2, dealerValuesRaw.length));
-                    dealerCards = dealerPreview;
-                    hideDealerHole = dealerPreview.length > 1;
-                    hideHoleIndex = hideDealerHole ? 1 : null;
-                    dealerScoreDisplay = hideDealerHole ? null : calculateHandValue(dealerPreview);
-                    if (!hideDealerHole && dealerScoreDisplay !== null) {
-                        lastDealerKnownScore = dealerScoreDisplay;
-                    }
+                const showPreviewOnly =
+                    settleInFlight && pendingRequestId !== 0n && !lastRoundMessage;
+
+                if (showPreviewOnly) {
+                    dealerCards = dealerValuesRaw.slice(0, Math.min(2, dealerValuesRaw.length));
+                    dealerScoreDisplay = dealerCards.length > 1 ? null : calculateHandValue(dealerCards);
                 } else {
-                    const targetScore = lastDealerKnownScore || (dealerValuesRaw.length ? calculateHandValue(dealerValuesRaw) : null);
-                    const reveal = computeDealerRevealSequence(dealerValuesRaw, targetScore);
+                    const reveal = computeDealerRevealSequence(dealerValuesRaw, targetScore, effectivePhase);
                     dealerCards = reveal.cards;
                     dealerScoreDisplay = reveal.score;
-                    hideDealerHole = false;
-                    hideHoleIndex = null;
-                    if (dealerScoreDisplay !== null) {
-                        lastDealerKnownScore = dealerScoreDisplay;
-                    }
-                    batchState.lastDealerCardCount = Math.max(batchState.lastDealerCardCount, dealerCards.length);
+                }
+                let hideDealerHole = false;
+                let hideHoleIndex = null;
+
+                if (isActive && effectivePhase === GAME_PHASE.Active && dealerCards.length > 1) {
+                    hideDealerHole = true;
+                    hideHoleIndex = 1;
+                    dealerScoreDisplay = null;
                 }
 
-                if (dealerCards.length) {
+                if (!hideDealerHole && dealerScoreDisplay !== null) {
+                    lastDealerKnownScore = dealerScoreDisplay;
+                }
+
+                if (!showPreviewOnly) {
+                    batchState.lastDealerCardCount = Math.max(batchState.lastDealerCardCount, dealerCards.length);
+                }
+                if (!isActive && dealerCards.length && !showPreviewOnly) {
                     batchState.cachedDealerCards = dealerCards.slice();
                 }
 
@@ -3407,9 +3587,12 @@
 
                 const pendingStatus = computePendingStatus();
                 if (pendingStatus) {
-                    setTableStatus(pendingStatus.message, pendingStatus.tone);
+                    const message = pendingStatus.message.includes('Pending reveal')
+                        ? 'Settlement in progress...'
+                        : pendingStatus.message;
+                    setTableStatus(message, pendingStatus.tone);
                 } else {
-                    switch (phase) {
+                    switch (effectivePhase) {
                         case GAME_PHASE.Active:
                             setTableStatus('Player turn. Decide to hit or stand.', 'info');
                             break;
@@ -3443,6 +3626,10 @@
             lastRoundMessage = null;
             lastRoundTone = 'info';
             setPendingRequestId(0n);
+            batchState.virtualCount = 2;
+            batchState.stood = false;
+            batchState.playerCardCount = 2;
+            batchState.lastPlayerCardCount = 2;
             updateGameControlsVisibility();
             updateForceResetButtonState();
             updateStartButtonState();
@@ -3471,6 +3658,7 @@
             updateStatus(`🃏 Card dealt (slot ${slot}).`, 'info', true);
             batchState.playerCardCount = totalCards;
             batchState.lastPlayerCardCount = Math.max(batchState.lastPlayerCardCount, totalCards);
+            batchState.virtualCount = Math.max(batchState.virtualCount || 0, totalCards);
             updateGameDisplayBatch();
         }
 
@@ -3491,9 +3679,15 @@
             updateGameDisplayBatch();
         }
 
-        function handleBatchSettlementRequested(requestId) {
+        function handleBatchSettlementRequested(requestId, playerCardCount) {
             setPendingRequestId(BigInt(requestId));
             settleInFlight = true;
+            if (playerCardCount && playerCardCount > 0) {
+                batchState.virtualCount = playerCardCount;
+                batchState.playerCardCount = playerCardCount;
+                batchState.lastPlayerCardCount = Math.max(batchState.lastPlayerCardCount, playerCardCount);
+            }
+            batchState.phase = GAME_PHASE.Settling;
             updateStatus(`🧾 Settlement requested (Gateway request ${requestId}).`, 'progress');
             updateGameDisplayBatch();
         }
@@ -3554,7 +3748,7 @@
             try {
                 const playerLogCards = extractPlayerCards(batchState.lastPlayerCardCount || batchState.playerHandles.length);
                 const dealerLogRaw = (batchState.dealerHandles || []).map((handle) => valueForHandle(handle));
-                const dealerLogReveal = computeDealerRevealSequence(dealerLogRaw, Number(dealerScore));
+                const dealerLogReveal = computeDealerRevealSequence(dealerLogRaw, Number(dealerScore), GAME_PHASE.Settling);
                 console.log('[batch] round settled', {
                     result: resultCode,
                     payoutWei: payoutWei.toString(),
