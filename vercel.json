@@ -20,6 +20,24 @@
           "value": "*"
         }
       ]
+    },
+    {
+      "source": "**/*.wasm",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "application/wasm"
+        }
+      ]
+    },
+    {
+      "source": "**/*.js",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "application/javascript"
+        }
+      ]
     }
   ],
   "buildCommand": "npm run prepare-wasm",
