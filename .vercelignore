@@ -1,0 +1,56 @@
+# 环境变量文件（包含私钥）
+.env
+.env.local
+.env.*.local
+
+# Git 相关
+.git
+.gitignore
+.gitattributes
+
+# 开发工具
+node_modules
+npm-debug.log
+yarn-error.log
+pnpm-debug.log
+
+# 编译缓存
+cache
+artifacts
+.hardhat_artifacts
+fhevmTemp
+.coverage_artifacts
+
+# 测试文件
+test
+*.test.js
+*.spec.js
+
+# IDE
+.vscode
+.idea
+*.swp
+*.swo
+*~
+.DS_Store
+
+# 文档
+README.md
+CHANGELOG.md
+LICENSE
+
+# 只有本地开发需要的脚本
+scripts/deploy.js
+scripts/deploy-sepolia.js
+scripts/deploy-test.js
+scripts/deploy-batch.js
+scripts/test-local.js
+scripts/reveal-watchdog.js
+
+# Hardhat 配置（不需要在 Vercel 运行）
+hardhat.config.js
+
+# 包管理文件（Vercel 会处理）
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
