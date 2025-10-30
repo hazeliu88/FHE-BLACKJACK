@@ -16,10 +16,11 @@ pnpm-debug.log
 
 # 编译缓存
 cache
-artifacts
 .hardhat_artifacts
 fhevmTemp
 .coverage_artifacts
+
+# 注意：artifacts 目录包含合约 ABI JSON，需要保留用于前端加载
 
 # 测试文件
 test
